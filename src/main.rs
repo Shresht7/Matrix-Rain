@@ -19,7 +19,7 @@ const STREAM_COLOR: RGBColor = RGBColor(0, 255, 70);
 
 const FPS: u64 = 60;
 
-// const MODE
+const MODE: utils::Mode = utils::Mode::Original;
 
 //  ====
 //  MAIN
@@ -35,9 +35,9 @@ fn main() {
             continue;
         }
         let mut stream = Stream::new(STREAM_MINCOUNT, STREAM_MAXCOUNT, STREAM_COLOR);
-        let random_speed = utils::random_between(1, 4);
+        let random_speed = utils::random_between(5, 20);
         let height_offset = utils::random_between(-50, 1);
-        stream.generate_entities(c, height_offset, random_speed);
+        stream.generate_entities(c, height_offset, random_speed, MODE);
         streams.push(stream);
     }
 

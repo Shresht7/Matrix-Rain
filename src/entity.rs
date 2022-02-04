@@ -9,14 +9,22 @@ pub struct Entity {
     y: i32,
     speed: i32,
     color: utils::RGBColor,
-    symbol: String,
+    symbol: char,
+    mode: utils::Mode,
     frame_count: i32,
     switch_interval: i32,
 }
 
 impl Entity {
     /// Entity constructor
-    pub fn new(x: i32, y: i32, speed: i32, color: utils::RGBColor, is_first: bool) -> Self {
+    pub fn new(
+        x: i32,
+        y: i32,
+        speed: i32,
+        color: utils::RGBColor,
+        mode: utils::Mode,
+        is_first: bool,
+    ) -> Self {
         Self {
             x,
             y,
@@ -26,7 +34,8 @@ impl Entity {
             } else {
                 color
             },
-            symbol: String::from("x"),
+            symbol: 'x',
+            mode,
             frame_count: 0,
             switch_interval: 20,
         }
@@ -34,12 +43,27 @@ impl Entity {
 
     /// Set Entity Symbol
     pub fn set_symbol(&mut self) {
-        let r = utils::random_between(0, 2);
-        self.symbol = if r == 0 {
-            String::from("0")
-        } else {
-            String::from("1")
-        };
+        match self.mode {
+            utils::Mode::Original => {
+                let r = utils::random_between(0x30a0, 0x30a0 + 96) as u32;
+                self.symbol = std::char::from_u32(r).unwrap_or('0');
+            }
+
+            utils::Mode::Binary => {
+                let r = utils::random_between(0, 2);
+                self.symbol = if r == 0 { '0' } else { '1' };
+            }
+
+            utils::Mode::ASCII => {
+                let r = utils::random_between(0, 127) as u32;
+                self.symbol = std::char::from_u32(r).unwrap_or('0');
+            }
+
+            utils::Mode::Braille => {
+                let r = utils::random_between(0x2840, 0x2840 + 63) as u32;
+                self.symbol = std::char::from_u32(r).unwrap_or('0');
+            }
+        }
     }
 
     /// Rain

@@ -5,8 +5,18 @@ use rand::Rng;
 //  =========
 
 /// ANSI RGB Color
-#[derive(Copy, Clone)]
+#[derive(Clone, Copy)]
 pub struct RGBColor(pub i32, pub i32, pub i32);
+
+//  Matrix Modes
+#[derive(Clone, Copy)]
+#[allow(dead_code)]
+pub enum Mode {
+    Original,
+    Binary,
+    ASCII,
+    Braille,
+}
 
 /// Generate a random number between min and max
 pub fn random_between(min: i32, max: i32) -> i32 {
@@ -24,9 +34,12 @@ pub fn cursor_move_to(r: i32, c: i32) {
 }
 
 /// Color string with RGB
-pub fn rgb(s: &String, color: RGBColor) -> String {
+pub fn rgb(s: &char, color: RGBColor) -> String {
     format!(
         "\u{001b}[38;2;{};{};{}m{}\u{001b}[0m",
-        color.0, color.1, color.2, s
+        color.0,
+        color.1,
+        color.2,
+        s.to_string()
     )
 }

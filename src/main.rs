@@ -17,7 +17,7 @@ const STREAM_MINCOUNT: u8 = 3;
 const STREAM_MAXCOUNT: u8 = 7;
 const STREAM_COLOR: RGBColor = RGBColor(0, 255, 70);
 
-// const FPS: u8 = 15;
+const FPS: u64 = 15;
 
 // const MODE
 
@@ -38,8 +38,11 @@ fn main() {
     }
 
     //  Render streams
-    utils::clear_screen();
-    for stream in streams.iter_mut() {
-        stream.render(ROWS);
+    loop {
+        utils::clear_screen();
+        for stream in streams.iter_mut() {
+            stream.render(ROWS);
+        }
+        std::thread::sleep(std::time::Duration::from_millis(1000 / FPS));
     }
 }

@@ -10,18 +10,18 @@ pub struct Stream {
     pub entities: Vec<Entity>,
 
     /// The count of entities
-    count: u8,
+    count: i32,
 
     /// Stream entity color
     color: utils::RGBColor,
 
     /// Speed offset
-    speed_offset: u8,
+    speed_offset: i32,
 }
 
 impl Stream {
     /// Construct new stream
-    pub fn new(min_count: u8, max_count: u8, color: utils::RGBColor) -> Self {
+    pub fn new(min_count: i32, max_count: i32, color: utils::RGBColor) -> Self {
         Stream {
             entities: Vec::new(),
             count: utils::random_between(min_count, max_count),
@@ -31,17 +31,17 @@ impl Stream {
     }
 
     /// Generate stream entities
-    pub fn generate_entities(&mut self, x: u8, mut y: u8) {
+    pub fn generate_entities(&mut self, x: i32, mut y: i32, speed: i32) {
         for i in 0..self.count {
-            let mut e = Entity::new(x, y, 1, self.color.clone(), i == 0);
+            let mut e = Entity::new(x, y, speed, self.color.clone(), i == 0);
             e.set_symbol();
             self.entities.push(e);
-            y += 1;
+            y -= 1;
         }
     }
 
     /// Render stream
-    pub fn render(&mut self, rows: u8) {
+    pub fn render(&mut self, rows: i32) {
         for entity in self.entities.iter_mut() {
             entity.render();
             entity.rain(rows, self.speed_offset);

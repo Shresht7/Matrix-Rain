@@ -6,18 +6,18 @@ use crate::utils;
 
 #[derive(Debug)]
 pub struct Entity {
-    x: u8,
-    y: u8,
-    speed: u8,
+    x: i32,
+    y: i32,
+    speed: i32,
     color: utils::RGBColor,
     symbol: String,
-    frame_count: u8,
-    switch_interval: u8,
+    frame_count: i32,
+    switch_interval: i32,
 }
 
 impl Entity {
     /// Entity constructor
-    pub fn new(x: u8, y: u8, speed: u8, color: utils::RGBColor, is_first: bool) -> Self {
+    pub fn new(x: i32, y: i32, speed: i32, color: utils::RGBColor, is_first: bool) -> Self {
         Self {
             x,
             y,
@@ -44,7 +44,7 @@ impl Entity {
     }
 
     /// Rain
-    pub fn rain(&mut self, rows: u8, speed_offset: u8) {
+    pub fn rain(&mut self, rows: i32, speed_offset: i32) {
         self.y = if self.y > rows {
             0
         } else {

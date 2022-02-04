@@ -6,10 +6,10 @@ use rand::Rng;
 
 /// ANSI RGB Color
 #[derive(Debug, Copy, Clone)]
-pub struct RGBColor(pub u8, pub u8, pub u8);
+pub struct RGBColor(pub i32, pub i32, pub i32);
 
 /// Generate a random number between min and max
-pub fn random_between(min: u8, max: u8) -> u8 {
+pub fn random_between(min: i32, max: i32) -> i32 {
     rand::thread_rng().gen_range(min..max)
 }
 
@@ -19,7 +19,7 @@ pub fn clear_screen() {
 }
 
 /// Move cursor to position
-pub fn cursor_move_to(r: u8, c: u8) {
+pub fn cursor_move_to(r: i32, c: i32) {
     print!("\u{001b}[{};{}H", r, c);
 }
 

@@ -34,7 +34,7 @@ impl Entity {
             } else {
                 color
             },
-            symbol: 'x',
+            symbol: ' ',
             mode,
             frame_count: 0,
             switch_interval: 20,
@@ -80,11 +80,27 @@ impl Entity {
         if self.y < 0 {
             return;
         }
-        utils::cursor_move_to(self.y, self.x);
+        utils::cursor_move_to(
+            self.y.try_into().unwrap_or_default(),
+            self.x.try_into().unwrap_or_default(),
+        );
         print!("{}", utils::rgb(&self.symbol, self.color));
         if self.frame_count % self.switch_interval == 0 {
             self.set_symbol()
         }
         self.frame_count += 1;
+    }
+
+    pub fn clean(&self) {
+        utils::cursor_move_to(
+            (self.y - self.speed).try_into().unwrap_or_default(),
+            self.x.try_into().unwrap_or_default(),
+        );
+        match self.mode {
+            utils::Mode::Original => print!("  "),
+            utils::Mode::ASCII => print!(" "),
+            utils::Mode::Binary => print!(" "),
+            utils::Mode::Braille => print!(" "),
+        }
     }
 }

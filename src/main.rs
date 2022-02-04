@@ -19,7 +19,7 @@ const STREAM_COLOR: RGBColor = RGBColor(0, 255, 70);
 
 const FPS: u64 = 60;
 
-const MODE: utils::Mode = utils::Mode::Original;
+const MODE: utils::Mode = utils::Mode::Binary;
 
 //  ====
 //  MAIN
@@ -42,8 +42,8 @@ fn main() {
     }
 
     //  Render streams
+    utils::clear_screen();
     loop {
-        utils::clear_screen();
         for stream in streams.iter_mut() {
             stream.render(ROWS);
         }

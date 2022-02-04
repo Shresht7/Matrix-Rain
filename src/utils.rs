@@ -29,7 +29,7 @@ pub fn clear_screen() {
 }
 
 /// Move cursor to position
-pub fn cursor_move_to(r: i32, c: i32) {
+pub fn cursor_move_to(r: u32, c: u32) {
     print!("\u{001b}[{};{}H", r, c);
 }
 

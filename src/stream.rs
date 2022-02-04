@@ -43,5 +43,9 @@ impl Stream {
             entity.render();
             entity.rain(rows);
         }
+        match self.entities.last() {
+            Some(e) => e.clean(),
+            _ => {}
+        }
     }
 }

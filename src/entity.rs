@@ -44,16 +44,19 @@ impl Entity {
     }
 
     /// Rain
-    pub fn rain(&mut self, rows: i32, speed_offset: i32) {
+    pub fn rain(&mut self, rows: i32) {
         self.y = if self.y > rows {
             0
         } else {
-            self.y + (self.speed + speed_offset) / 6
+            self.y + self.speed
         }
     }
 
     /// Render
     pub fn render(&mut self) {
+        if self.y < 0 {
+            return;
+        }
         utils::cursor_move_to(self.y, self.x);
         print!("{}", utils::rgb(&self.symbol, self.color));
         if self.frame_count % self.switch_interval == 0 {

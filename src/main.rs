@@ -9,7 +9,7 @@ use utils::RGBColor;
 //  CONFIGURATION
 //  =============
 
-const ROWS: i32 = 80;
+const ROWS: i32 = 30;
 const COLUMNS: i32 = 120;
 // const COLUMN_SPACING: i32 = 3;
 
@@ -32,8 +32,9 @@ fn main() {
     //  Generate stream entities
     for c in 0..COLUMNS {
         let mut stream = Stream::new(STREAM_MINCOUNT, STREAM_MAXCOUNT, STREAM_COLOR);
-        let random_speed = utils::random_between(6, 20);
-        stream.generate_entities(c, 0, random_speed);
+        let random_speed = utils::random_between(1, 4);
+        let height_offset = utils::random_between(-50, 1);
+        stream.generate_entities(c, height_offset, random_speed);
         streams.push(stream);
     }
 

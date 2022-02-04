@@ -5,7 +5,7 @@ use rand::Rng;
 //  =========
 
 /// ANSI RGB Color
-#[derive(Debug, Copy, Clone)]
+#[derive(Copy, Clone)]
 pub struct RGBColor(pub i32, pub i32, pub i32);
 
 /// Generate a random number between min and max

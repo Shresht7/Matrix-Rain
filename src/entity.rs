@@ -4,7 +4,6 @@ use crate::utils;
 //  ENTITY
 //  ======
 
-#[derive(Debug)]
 pub struct Entity {
     x: i32,
     y: i32,

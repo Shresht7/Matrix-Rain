@@ -13,11 +13,11 @@ const ROWS: i32 = 30;
 const COLUMNS: i32 = 120;
 // const COLUMN_SPACING: i32 = 3;
 
-const STREAM_MINCOUNT: i32 = 3;
-const STREAM_MAXCOUNT: i32 = 7;
+const STREAM_MINCOUNT: i32 = 5;
+const STREAM_MAXCOUNT: i32 = 10;
 const STREAM_COLOR: RGBColor = RGBColor(0, 255, 70);
 
-const FPS: u64 = 15;
+const FPS: u64 = 60;
 
 // const MODE
 

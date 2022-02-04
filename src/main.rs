@@ -11,7 +11,7 @@ use utils::RGBColor;
 
 const ROWS: i32 = 30;
 const COLUMNS: i32 = 120;
-// const COLUMN_SPACING: i32 = 3;
+const COLUMN_SPACING: i32 = 3;
 
 const STREAM_MINCOUNT: i32 = 5;
 const STREAM_MAXCOUNT: i32 = 10;
@@ -31,6 +31,9 @@ fn main() {
 
     //  Generate stream entities
     for c in 0..COLUMNS {
+        if c % COLUMN_SPACING != 0 {
+            continue;
+        }
         let mut stream = Stream::new(STREAM_MINCOUNT, STREAM_MAXCOUNT, STREAM_COLOR);
         let random_speed = utils::random_between(1, 4);
         let height_offset = utils::random_between(-50, 1);

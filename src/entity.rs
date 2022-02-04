@@ -35,7 +35,7 @@ impl Entity {
 
     /// Set Entity Symbol
     pub fn set_symbol(&mut self) {
-        let r = utils::random_between(0, 1);
+        let r = utils::random_between(0, 2);
         self.symbol = if r == 0 {
             String::from("0")
         } else {

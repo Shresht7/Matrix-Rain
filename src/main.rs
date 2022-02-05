@@ -11,9 +11,6 @@ use crossterm::terminal;
 //  CONFIGURATION
 //  =============
 
-/// Space between two columns
-const COLUMN_SPACING: u16 = 3;
-
 /// Stream Color
 const STREAM_COLOR: RGBColor = RGBColor(0, 255, 70);
 
@@ -35,14 +32,9 @@ fn main() {
     let mut streams: Vec<Stream> = Vec::new();
 
     //  Generate stream entities
-    for c in 0..columns {
-        //  Space out streams
-        if c % COLUMN_SPACING != 0 {
-            continue;
-        }
-
+    for c in 0..=columns {
         //  Generate a stream
-        let mut stream = Stream::new(5, 10, STREAM_COLOR);
+        let mut stream = Stream::new(0, 10, STREAM_COLOR);
         let random_speed = utils::random_between(5, 20);
         let height_offset = utils::random_between(-50, 1);
         stream.generate_entities(c as i32, height_offset, random_speed, MODE);

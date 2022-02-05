@@ -11,14 +11,16 @@ use crossterm::terminal;
 //  CONFIGURATION
 //  =============
 
+/// Space between two columns
 const COLUMN_SPACING: u16 = 3;
 
-const STREAM_MINCOUNT: u8 = 5;
-const STREAM_MAXCOUNT: u8 = 10;
+/// Stream Color
 const STREAM_COLOR: RGBColor = RGBColor(0, 255, 70);
 
+/// Frames per second
 const FPS: u64 = 60;
 
+/// Character Symbol Set
 const MODE: utils::Mode = utils::Mode::Binary;
 
 //  ====
@@ -40,7 +42,7 @@ fn main() {
         }
 
         //  Generate a stream
-        let mut stream = Stream::new(STREAM_MINCOUNT as i32, STREAM_MAXCOUNT as i32, STREAM_COLOR);
+        let mut stream = Stream::new(5, 10, STREAM_COLOR);
         let random_speed = utils::random_between(5, 20);
         let height_offset = utils::random_between(-50, 1);
         stream.generate_entities(c as i32, height_offset, random_speed, MODE);

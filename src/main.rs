@@ -5,6 +5,8 @@ mod utils;
 use stream::Stream;
 use utils::RGBColor;
 
+use crossterm::terminal;
+
 //  =============
 //  CONFIGURATION
 //  =============
@@ -25,7 +27,7 @@ const MODE: utils::Mode = utils::Mode::Binary;
 
 fn main() {
     //  Get Terminal Window Size
-    let (columns, rows) = crossterm::terminal::size().unwrap_or((40, 120));
+    let (columns, rows) = terminal::size().unwrap_or((40, 120));
 
     //  Instantiate streams vector
     let mut streams: Vec<Stream> = Vec::new();

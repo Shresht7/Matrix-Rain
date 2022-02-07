@@ -26,7 +26,7 @@ impl Stream {
             entities: Vec::new(),
             count: utils::random_between(min_count, max_count),
             color,
-            speed: utils::random_between(0.0, 10.0) / 15.0,
+            speed: utils::random_between(1.0, 10.0) / 5.0,
         }
     }
 

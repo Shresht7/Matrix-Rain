@@ -9,11 +9,11 @@ use crate::utils;
 /// Represents a single entity in the matrix-stream
 pub struct Entity {
     /// x position
-    x: f32,
+    pub x: i32,
     /// y position
-    y: f32,
+    pub y: i32,
     /// rain-fall speed
-    speed: f32,
+    speed: i32,
     /// entity color
     color: utils::RGBColor,
     /// entity symbol
@@ -29,9 +29,9 @@ pub struct Entity {
 impl Entity {
     /// Entity constructor
     pub fn new(
-        x: f32,
-        y: f32,
-        speed: f32,
+        x: i32,
+        y: i32,
+        speed: i32,
         color: utils::RGBColor,
         mode: utils::Mode,
         is_first: bool,
@@ -82,25 +82,19 @@ impl Entity {
     }
 
     /// Rain
-    pub fn rain(&mut self, rows: i32) {
-        self.y = if self.y > (rows as f32) + 1.0 {
-            //  if y position is beyond max rows...
-            (utils::random_between::<f32>(-100.0, 0.0)).floor() //  ... reset it's position above the screen.
-        } else {
-            //  else...
-            (self.y + self.speed + 1.0).floor() //  ...keep raining
-        }
+    pub fn rain(&mut self) {
+        self.y += self.speed
     }
 
     /// Render entity on screen
     pub fn render(&mut self) {
         //  Don't render if y is above screen
-        if self.y < 0.0 {
+        if self.y < 0 {
             return;
         }
 
         //  Move cursor to position and write symbol
-        utils::cursor_move_to(self.y.floor() as u32, self.x.floor() as u32);
+        utils::cursor_move_to(self.y as u32, self.x as u32);
         print!("{}", utils::rgb(&self.symbol, self.color));
 
         //  Switch symbol if frame_count exceeds switch_interval
@@ -113,7 +107,7 @@ impl Entity {
     /// Cleans the last position of this entity
     pub fn clean(&self, rows: u32) {
         let last_y = self.y - self.speed;
-        if last_y <= 0.0 {
+        if last_y <= 0 {
             utils::cursor_move_to(rows, self.x as u32)
         } else {
             utils::cursor_move_to(last_y as u32, self.x as u32);

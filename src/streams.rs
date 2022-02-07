@@ -23,8 +23,8 @@ impl Streams {
         //  Generate stream entities
         for c in 0..count {
             //  Generate a stream
-            let height_offset = utils::random_between(-50.0, 0.0);
-            let stream = Stream::new(c as f32, height_offset, min_count, max_count, color, mode);
+            let height_offset = utils::random_between(-50, 0);
+            let stream = Stream::new(c as i32, height_offset, min_count, max_count, color, mode);
 
             //  Add stream to streams collection
             streams.push(stream);

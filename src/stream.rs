@@ -10,7 +10,7 @@ pub struct Stream {
     pub entities: Vec<Entity>,
 
     /// Count of entities
-    count: i32,
+    count: u16,
 
     /// Stream entity color
     color: utils::RGBColor,
@@ -18,7 +18,7 @@ pub struct Stream {
 
 impl Stream {
     /// Construct new stream
-    pub fn new(min_count: i32, max_count: i32, color: utils::RGBColor) -> Self {
+    pub fn new(min_count: u16, max_count: u16, color: utils::RGBColor) -> Self {
         Stream {
             entities: Vec::new(),
             count: utils::random_between(min_count, max_count),
@@ -44,7 +44,7 @@ impl Stream {
             entity.rain(rows);
         }
         match self.entities.last() {
-            Some(e) => e.clean(),
+            Some(e) => e.clean(rows as u32),
             _ => {}
         }
     }

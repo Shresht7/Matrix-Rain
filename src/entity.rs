@@ -83,7 +83,7 @@ impl Entity {
 
     /// Rain
     pub fn rain(&mut self, rows: i32) {
-        self.y = if self.y > (rows as f32) {
+        self.y = if self.y > (rows as f32) + 1.0 {
             //  if y position is beyond max rows...
             (utils::random_between::<f32>(-100.0, 0.0)).floor() //  ... reset it's position above the screen.
         } else {
@@ -111,12 +111,13 @@ impl Entity {
     }
 
     /// Cleans the last position of this entity
-    pub fn clean(&self) {
+    pub fn clean(&self, rows: u32) {
         let last_y = self.y - self.speed;
-        if last_y < 0.0 {
-            return;
+        if last_y <= 0.0 {
+            utils::cursor_move_to(rows, self.x as u32)
+        } else {
+            utils::cursor_move_to(last_y as u32, self.x as u32);
         }
-        utils::cursor_move_to(last_y as u32, self.x as u32);
         match self.mode {
             utils::Mode::Original => print!("  "),
             utils::Mode::ASCII => print!(" "),

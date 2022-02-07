@@ -12,7 +12,7 @@ pub const LEADING_ENTITY_COLOR: utils::RGBColor = utils::RGBColor(200, 255, 200)
 pub const STREAM_COLOR: utils::RGBColor = utils::RGBColor(0, 255, 70);
 
 /// Frame-Rate
-pub const FPS: u64 = 10;
+pub const FPS: u64 = 60;
 
 /// Character Symbol Set
 pub const MODE: utils::Mode = utils::Mode::Binary;

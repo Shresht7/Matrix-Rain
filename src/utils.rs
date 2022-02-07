@@ -67,15 +67,6 @@ mod tests {
         }
     }
 
-    #[test]
-    fn generates_a_new_random_number_everytime() {
-        let first = super::random_between(0, 10);
-        let second = super::random_between(0, 10);
-        let third = super::random_between(0, 10);
-        let all_different = first != second && second != third && third != first;
-        assert!(all_different);
-    }
-
     /// Returns the type of the variable
     #[allow(dead_code)]
     fn type_of<T>(_: &T) -> &str {

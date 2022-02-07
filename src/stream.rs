@@ -27,13 +27,13 @@ impl Stream {
     }
 
     /// Generate stream entities
-    pub fn generate_entities(&mut self, x: i32, mut y: i32, speed: i32, mode: utils::Mode) {
+    pub fn generate_entities(&mut self, x: f32, mut y: f32, speed: f32, mode: utils::Mode) {
         for i in 0..self.count {
-            let speed = (speed + utils::random_between(0, 10)) / 15;
+            let speed = (speed + utils::random_between(0.0, 10.0)) / 15.0;
             let mut e = Entity::new(x, y, speed, self.color.clone(), mode, i == 0);
             e.set_symbol();
             self.entities.push(e);
-            y -= 1;
+            y -= 1.0;
         }
     }
 

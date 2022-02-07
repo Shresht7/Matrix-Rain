@@ -8,9 +8,9 @@ use crate::utils;
 
 /// Represents a single entity in the matrix-stream
 pub struct Entity {
-    x: i32,
-    y: i32,
-    speed: i32,
+    x: f32,
+    y: f32,
+    speed: f32,
     color: utils::RGBColor,
     symbol: char,
     mode: utils::Mode,
@@ -21,9 +21,9 @@ pub struct Entity {
 impl Entity {
     /// Entity constructor
     pub fn new(
-        x: i32,
-        y: i32,
-        speed: i32,
+        x: f32,
+        y: f32,
+        speed: f32,
         color: utils::RGBColor,
         mode: utils::Mode,
         is_first: bool,
@@ -47,21 +47,25 @@ impl Entity {
     /// Set Entity Symbol
     pub fn set_symbol(&mut self) {
         match self.mode {
+            //  Katakana Symbols
             utils::Mode::Original => {
                 let r = utils::random_between(0x30a0, 0x30a0 + 96) as u32;
                 self.symbol = std::char::from_u32(r).unwrap_or('0');
             }
 
+            //  Binary Symbols
             utils::Mode::Binary => {
                 let r = utils::random_between(0, 2);
                 self.symbol = if r == 0 { '0' } else { '1' };
             }
 
+            //  ASCII Symbols
             utils::Mode::ASCII => {
                 let r = utils::random_between(33, 127) as u32;
                 self.symbol = std::char::from_u32(r).unwrap_or('0');
             }
 
+            //  Braille Symbols
             utils::Mode::Braille => {
                 let r = utils::random_between(0x2840, 0x2840 + 63) as u32;
                 self.symbol = std::char::from_u32(r).unwrap_or('0');
@@ -71,8 +75,8 @@ impl Entity {
 
     /// Rain
     pub fn rain(&mut self, rows: i32) {
-        self.y = if self.y > rows {
-            0
+        self.y = if self.y as i32 > rows {
+            utils::random_between::<f32>(-100.0, 0.0)
         } else {
             self.y + self.speed
         }
@@ -80,13 +84,10 @@ impl Entity {
 
     /// Render
     pub fn render(&mut self) {
-        if self.y < 0 {
+        if self.y < 0.0 {
             return;
         }
-        utils::cursor_move_to(
-            self.y.try_into().unwrap_or_default(),
-            self.x.try_into().unwrap_or_default(),
-        );
+        utils::cursor_move_to(self.y as u32, self.x as u32);
         print!("{}", utils::rgb(&self.symbol, self.color));
         if self.frame_count % self.switch_interval == 0 {
             self.set_symbol()
@@ -95,10 +96,7 @@ impl Entity {
     }
 
     pub fn clean(&self) {
-        utils::cursor_move_to(
-            (self.y - self.speed).try_into().unwrap_or_default(),
-            self.x.try_into().unwrap_or_default(),
-        );
+        utils::cursor_move_to((self.y - self.speed) as u32, self.x as u32);
         match self.mode {
             utils::Mode::Original => print!("  "),
             utils::Mode::ASCII => print!(" "),

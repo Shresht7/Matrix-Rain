@@ -29,6 +29,7 @@ fn render(columns: u16, rows: u16) {
     utils::clear_screen(); //  Clear the screen
     loop {
         streams.render(rows); //  Render each stream
-        std::thread::sleep(std::time::Duration::from_millis(1000 / config::FPS)); //  Sleep for 1/FPS seconds
+        std::thread::sleep(std::time::Duration::from_millis(1000 / config::FPS));
+        //  Sleep for 1/FPS seconds
     }
 }

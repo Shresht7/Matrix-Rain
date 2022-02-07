@@ -58,7 +58,7 @@ impl Entity {
             }
 
             utils::Mode::ASCII => {
-                let r = utils::random_between(0, 127) as u32;
+                let r = utils::random_between(33, 127) as u32;
                 self.symbol = std::char::from_u32(r).unwrap_or('0');
             }
 

@@ -73,7 +73,7 @@ mod tests {
         let second = super::random_between(0, 10);
         let third = super::random_between(0, 10);
         let all_different = first != second && second != third && third != first;
-        assert_eq!(all_different, true);
+        assert!(all_different);
     }
 
     /// Returns the type of the variable

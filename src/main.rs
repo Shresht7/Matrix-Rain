@@ -1,25 +1,12 @@
+mod config;
 mod entity;
 mod stream;
 mod streams;
 mod utils;
 
 use streams::Streams;
-use utils::RGBColor;
 
 use crossterm::terminal;
-
-//  =============
-//  CONFIGURATION
-//  =============
-
-/// Stream Color
-const STREAM_COLOR: RGBColor = RGBColor(0, 255, 70);
-
-/// Frames per second
-const FPS: u64 = 60;
-
-/// Character Symbol Set
-const MODE: utils::Mode = utils::Mode::Binary;
 
 //  ====
 //  MAIN
@@ -36,12 +23,12 @@ fn main() {
 /// Render the Matrix-Rain on the screen
 fn render(columns: u16, rows: u16) {
     //  Instantiate streams
-    let mut streams = Streams::new(columns, MODE, STREAM_COLOR);
+    let mut streams = Streams::new(columns, config::MODE, config::STREAM_COLOR);
 
     //  Render Matrix-Rain
     utils::clear_screen(); //  Clear the screen
     loop {
         streams.render(rows); //  Render each stream
-        std::thread::sleep(std::time::Duration::from_millis(1000 / FPS)); //  Sleep for 1/FPS seconds
+        std::thread::sleep(std::time::Duration::from_millis(1000 / config::FPS)); //  Sleep for 1/FPS seconds
     }
 }

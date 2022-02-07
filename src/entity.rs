@@ -1,9 +1,12 @@
+//  Library
+use crate::config;
 use crate::utils;
 
 //  ======
 //  ENTITY
 //  ======
 
+/// Represents a single entity in the matrix-stream
 pub struct Entity {
     x: i32,
     y: i32,
@@ -11,8 +14,8 @@ pub struct Entity {
     color: utils::RGBColor,
     symbol: char,
     mode: utils::Mode,
-    frame_count: i32,
-    switch_interval: i32,
+    frame_count: u16,
+    switch_interval: u16,
 }
 
 impl Entity {
@@ -30,7 +33,7 @@ impl Entity {
             y,
             speed,
             color: if is_first {
-                utils::RGBColor(200, 255, 200)
+                config::LEADING_ENTITY_COLOR
             } else {
                 color
             },

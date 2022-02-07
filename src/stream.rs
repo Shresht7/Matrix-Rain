@@ -28,7 +28,7 @@ impl Stream {
 
     /// Generate stream entities
     pub fn generate_entities(&mut self, x: f32, mut y: f32, speed: f32, mode: utils::Mode) {
-        for i in 0..self.count {
+        for i in 0..=self.count {
             let speed = (speed + utils::random_between(0.0, 10.0)) / 15.0;
             let mut e = Entity::new(x, y, speed, self.color.clone(), mode, i == 0);
             e.set_symbol();
@@ -40,12 +40,12 @@ impl Stream {
     /// Render stream
     pub fn render(&mut self, rows: i32) {
         for entity in self.entities.iter_mut() {
-            entity.render();
             entity.rain(rows);
+            entity.render();
         }
         match self.entities.last() {
             Some(e) => e.clean(rows as u32),
-            _ => {}
+            _ => { }
         }
     }
 }

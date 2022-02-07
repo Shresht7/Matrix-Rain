@@ -17,7 +17,13 @@ fn main() {
     let (columns, rows) = terminal::size().unwrap_or((40, 120));
 
     //  Instantiate streams
-    let mut streams = Streams::new(columns, config::MODE, config::STREAM_COLOR);
+    let mut streams = Streams::new(
+        columns,
+        config::STREAM_MIN_COUNT,
+        config::STREAM_MAX_COUNT,
+        config::MODE,
+        config::STREAM_COLOR
+    );
 
     //  Render the Matrix-Rain on screen
     utils::clear_screen(); //  Clear the screen

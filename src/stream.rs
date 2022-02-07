@@ -40,7 +40,7 @@ impl Stream {
             entities: Vec::new(),
             x,
             y,
-            speed: utils::random_between(1, 3),
+            speed: 1,
             count: utils::random_between(min_count, max_count),
             color,
             mode,
@@ -71,7 +71,7 @@ impl Stream {
         match self.entities.last() {
             Some(e) => {
                 e.clean(rows as u32);
-                if e.y > rows {
+                if e.y >= rows {
                     self.generate_entities();
                 }
             }

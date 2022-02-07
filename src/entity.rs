@@ -48,7 +48,7 @@ impl Entity {
             symbol: ' ',
             mode,
             frame_count: 0,
-            switch_interval: utils::random_between::<u16>(1, 20),
+            switch_interval: utils::random_between::<u16>(1, 60),
         };
     }
 

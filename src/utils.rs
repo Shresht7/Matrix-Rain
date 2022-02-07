@@ -4,11 +4,11 @@ use rand::Rng;
 //  UTILITIES
 //  =========
 
-/// ANSI RGB Color
+/// ANSI RGB Color Tuple Struct (Red, Green, Blue)
 #[derive(Clone, Copy)]
 pub struct RGBColor(pub i32, pub i32, pub i32);
 
-//  Matrix Modes
+//  Matrix mode determines the character set to use for the entities
 #[derive(Clone, Copy)]
 #[allow(dead_code)]
 pub enum Mode {
@@ -33,7 +33,7 @@ pub fn cursor_move_to(r: u32, c: u32) {
     print!("\u{001b}[{};{}H", r, c);
 }
 
-/// Color string with RGB
+/// Color string with ANSI RGB color code
 pub fn rgb(s: &char, color: RGBColor) -> String {
     format!(
         "\u{001b}[38;2;{};{};{}m{}\u{001b}[0m",

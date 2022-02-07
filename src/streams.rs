@@ -18,9 +18,8 @@ impl Streams {
         for c in 0..=count {
             //  Generate a stream
             let mut stream = Stream::new(3, 7, color);
-            let random_speed = utils::random_between(5.0, 20.0);
             let height_offset = utils::random_between(-50.0, 0.0);
-            stream.generate_entities(c as f32, height_offset, random_speed, mode);
+            stream.generate_entities(c as f32, height_offset, mode);
 
             //  Add stream to streams collection
             streams.push(stream);

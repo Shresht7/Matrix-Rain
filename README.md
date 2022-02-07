@@ -1,4 +1,4 @@
 # Matrix-Rain
 -------------
 
-The matrix-rain effect in the terminal
+The matrix-rain effect in the terminal.

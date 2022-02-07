@@ -15,7 +15,7 @@ impl Streams {
         let mut streams: Vec<Stream> = Vec::new();
 
         //  Generate stream entities
-        for c in 0..=count {
+        for c in 0..count {
             //  Generate a stream
             let mut stream = Stream::new(3, 7, color);
             let height_offset = utils::random_between(-50.0, 0.0);

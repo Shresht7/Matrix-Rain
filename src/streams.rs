@@ -1,3 +1,5 @@
+//  Library
+use crate::config;
 use crate::stream::Stream;
 use crate::utils;
 
@@ -22,6 +24,7 @@ impl Streams {
 
         //  Generate stream entities
         for c in 0..count {
+            if c % config::STREAM_SPACING != 0 { continue }
             //  Generate a stream
             let height_offset = utils::random_between(-50, 0);
             let stream = Stream::new(c as i32, height_offset, min_count, max_count, color, mode);

@@ -15,6 +15,9 @@ pub const STREAM_MAX_COUNT: u16 = 15;
 /// Default color of the streaming entities
 pub const STREAM_COLOR: utils::RGBColor = utils::RGBColor(0, 255, 70);
 
+/// Stream Spacing
+pub const STREAM_SPACING: u16 = 3;
+
 /// Frame-Rate
 pub const FPS: u64 = 5;
 

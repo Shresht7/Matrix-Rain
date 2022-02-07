@@ -15,4 +15,4 @@ pub const STREAM_COLOR: utils::RGBColor = utils::RGBColor(0, 255, 70);
 pub const FPS: u64 = 60;
 
 /// Character Symbol Set
-pub const MODE: utils::Mode = utils::Mode::Binary;
+pub const MODE: utils::Mode = utils::Mode::ASCII;

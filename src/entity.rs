@@ -85,10 +85,10 @@ impl Entity {
     pub fn rain(&mut self, rows: i32) {
         self.y = if self.y > (rows as f32) {
             //  if y position is beyond max rows...
-            utils::random_between::<f32>(-100.0, 0.0) //  ... reset it's position above the screen.
+            (utils::random_between::<f32>(-100.0, 0.0)).floor() //  ... reset it's position above the screen.
         } else {
             //  else...
-            self.y + self.speed //  ...keep raining
+            (self.y + self.speed).floor() //  ...keep raining
         }
     }
 
@@ -100,7 +100,7 @@ impl Entity {
         }
 
         //  Move cursor to position and write symbol
-        utils::cursor_move_to(self.y as u32, self.x as u32);
+        utils::cursor_move_to(self.y.floor() as u32, self.x.floor() as u32);
         print!("{}", utils::rgb(&self.symbol, self.color));
 
         //  Switch symbol if frame_count exceeds switch_interval
@@ -112,7 +112,11 @@ impl Entity {
 
     /// Cleans the last position of this entity
     pub fn clean(&self) {
-        utils::cursor_move_to((self.y - self.speed) as u32, self.x as u32);
+        let last_y = self.y - self.speed;
+        if last_y < 0.0 {
+            return;
+        }
+        utils::cursor_move_to(last_y as u32, self.x as u32);
         match self.mode {
             utils::Mode::Original => print!("  "),
             utils::Mode::ASCII => print!(" "),

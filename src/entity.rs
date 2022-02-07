@@ -8,13 +8,21 @@ use crate::utils;
 
 /// Represents a single entity in the matrix-stream
 pub struct Entity {
+    /// x position
     x: f32,
+    /// y position
     y: f32,
+    /// rain-fall speed
     speed: f32,
+    /// entity color
     color: utils::RGBColor,
+    /// entity symbol
     symbol: char,
+    /// character set mode
     mode: utils::Mode,
+    /// frame-count since last switch
     frame_count: u16,
+    /// number of frames before character switch
     switch_interval: u16,
 }
 
@@ -28,7 +36,7 @@ impl Entity {
         mode: utils::Mode,
         is_first: bool,
     ) -> Self {
-        Self {
+        return Self {
             x,
             y,
             speed,
@@ -41,7 +49,7 @@ impl Entity {
             mode,
             frame_count: 0,
             switch_interval: utils::random_between::<u16>(1, 20),
-        }
+        };
     }
 
     /// Set Entity Symbol
@@ -75,26 +83,34 @@ impl Entity {
 
     /// Rain
     pub fn rain(&mut self, rows: i32) {
-        self.y = if self.y as i32 > rows {
-            utils::random_between::<f32>(-100.0, 0.0)
+        self.y = if self.y > (rows as f32) {
+            //  if y position is beyond max rows...
+            utils::random_between::<f32>(-100.0, 0.0) //  ... reset it's position above the screen.
         } else {
-            self.y + self.speed
+            //  else...
+            self.y + self.speed //  ...keep raining
         }
     }
 
-    /// Render
+    /// Render entity on screen
     pub fn render(&mut self) {
+        //  Don't render if y is above screen
         if self.y < 0.0 {
             return;
         }
+
+        //  Move cursor to position and write symbol
         utils::cursor_move_to(self.y as u32, self.x as u32);
         print!("{}", utils::rgb(&self.symbol, self.color));
+
+        //  Switch symbol if frame_count exceeds switch_interval
         if self.frame_count % self.switch_interval == 0 {
             self.set_symbol()
         }
         self.frame_count += 1;
     }
 
+    /// Cleans the last position of this entity
     pub fn clean(&self) {
         utils::cursor_move_to((self.y - self.speed) as u32, self.x as u32);
         match self.mode {

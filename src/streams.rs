@@ -10,16 +10,21 @@ pub struct Streams {
 }
 
 impl Streams {
-    pub fn new(count: u16, min_count: u16, max_count: u16, mode: utils::Mode, color: utils::RGBColor) -> Self {
+    pub fn new(
+        count: u16,
+        min_count: u16,
+        max_count: u16,
+        mode: utils::Mode,
+        color: utils::RGBColor,
+    ) -> Self {
         //  Instantiate streams vector
         let mut streams: Vec<Stream> = Vec::new();
 
         //  Generate stream entities
         for c in 0..count {
             //  Generate a stream
-            let mut stream = Stream::new(min_count, max_count, color);
             let height_offset = utils::random_between(-50.0, 0.0);
-            stream.generate_entities(c as f32, height_offset, mode);
+            let stream = Stream::new(c as f32, height_offset, min_count, max_count, color, mode);
 
             //  Add stream to streams collection
             streams.push(stream);

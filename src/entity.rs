@@ -88,7 +88,7 @@ impl Entity {
             (utils::random_between::<f32>(-100.0, 0.0)).floor() //  ... reset it's position above the screen.
         } else {
             //  else...
-            (self.y + self.speed).floor() //  ...keep raining
+            (self.y + self.speed + 1.0).floor() //  ...keep raining
         }
     }
 

@@ -40,7 +40,7 @@ impl Entity {
             symbol: ' ',
             mode,
             frame_count: 0,
-            switch_interval: 20,
+            switch_interval: 2,
         }
     }
 

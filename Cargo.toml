@@ -9,4 +9,4 @@ edition = "2021"
 [dependencies]
 clap = "3.0.14"
 crossterm = "0.20"
-rand = "0.8.4"
+rand = "0.8.5"

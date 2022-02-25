@@ -8,5 +8,5 @@ edition = "2021"
 
 [dependencies]
 clap = "3.0.14"
-crossterm = "0.20"
+crossterm = "0.23"
 rand = "0.8.5"

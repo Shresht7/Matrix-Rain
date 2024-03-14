@@ -3,4 +3,8 @@
 
 The matrix-rain effect in the terminal.
 
-![screenshot](./screenshot.gif)
+![demo](./demo.gif)
+
+> [!NOTE]
+>
+> Just a simple program I made while learning Rust!

@@ -1,6 +1,6 @@
 //  Library
 use crate::ansi;
-use crate::utils;
+use crate::entity;
 use clap::Parser;
 
 //  =============
@@ -34,5 +34,5 @@ pub struct Config {
 
     /// Character Symbol Set
     #[clap(long, default_value = "Original")]
-    pub mode: utils::Mode,
+    pub mode: entity::Mode,
 }

@@ -8,16 +8,22 @@ use crate::utils;
 //  =======
 
 pub struct Streams {
+    rows: u16,
+    columns: u16,
     streams: Vec<Stream>,
 }
 
 impl Streams {
-    pub fn new(count: u16, config: &config::Config) -> Self {
-        //  Instantiate streams vector
-        let mut streams: Vec<Stream> = Vec::new();
+    pub fn new(rows: u16, columns: u16, config: &config::Config) -> Self {
+        // Instantiate Self
+        let mut ret = Self {
+            rows,
+            columns,
+            streams: Vec::new(),
+        };
 
         //  Generate stream entities
-        for c in 0..count {
+        for c in 0..ret.columns {
             if c % config.stream_spacing != 0 {
                 continue;
             }
@@ -26,16 +32,16 @@ impl Streams {
             let stream = Stream::new(c as i32, height_offset, config);
 
             //  Add stream to streams collection
-            streams.push(stream);
+            ret.streams.push(stream);
         }
 
-        Self { streams }
+        return ret;
     }
 
     /// Render all streams
-    pub fn render(&mut self, rows: u16, config: &config::Config) {
+    pub fn render(&mut self, config: &config::Config) {
         for stream in self.streams.iter_mut() {
-            stream.render(rows as i32, config);
+            stream.render(self.rows as i32, config);
         }
     }
 }

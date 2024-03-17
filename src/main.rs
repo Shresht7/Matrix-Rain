@@ -15,14 +15,14 @@ use streams::Streams;
 //  ====
 
 fn main() {
-    //  Parse command-line arguments
+    //  Parse command-line arguments as the configuration
     let config = config::Config::parse();
 
-    //  Get Terminal Window Size
+    //  Get Terminal Window Size to determine the number of rows and columns
     let (columns, rows) = terminal::size().unwrap_or((40, 120));
 
     //  Instantiate streams
-    let mut streams = Streams::new(columns, &config);
+    let mut streams = Streams::new(rows, columns, &config);
 
     // Switch to the alternate screen buffer
     terminal::enable_raw_mode().unwrap();
@@ -43,7 +43,7 @@ fn main() {
         }
 
         //  Render each stream
-        streams.render(rows, &config);
+        streams.render(&config);
 
         //  Sleep for 1/FPS seconds
         std::thread::sleep(Duration::from_millis(1000 / config.fps));

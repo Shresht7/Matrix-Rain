@@ -58,16 +58,25 @@ pub struct Entity {
 
 impl Entity {
     /// Entity constructor
-    pub fn new(x: i32, y: i32, speed: i32, is_first: bool, config: &config::Config) -> Self {
+    pub fn new(x: i32, y: i32, speed: i32, config: &config::Config) -> Self {
         return Self {
             x,
             y,
             speed,
-            color: if is_first {
-                config.leading_entity_color
-            } else {
-                config.stream_color
-            },
+            color: config.stream_color,
+            symbol: ' ',
+            mode: config.mode,
+            frame_count: 0,
+            switch_interval: utils::random_between::<u16>(1, 60),
+        };
+    }
+
+    pub fn new_leader(x: i32, y: i32, speed: i32, config: &config::Config) -> Self {
+        return Self {
+            x,
+            y,
+            speed,
+            color: config.leading_entity_color,
             symbol: ' ',
             mode: config.mode,
             frame_count: 0,

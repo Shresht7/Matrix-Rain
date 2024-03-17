@@ -1,3 +1,4 @@
+mod ansi;
 mod config;
 mod entity;
 mod stream;
@@ -31,7 +32,7 @@ fn main() {
     terminal::enable_raw_mode().unwrap();
 
     //  Render the Matrix-Rain on screen
-    utils::clear_screen();
+    ansi::clear_screen();
     loop {
         // Check if 'q' or Ctrl+C has been pressed
         if event::poll(Duration::from_millis(0)).unwrap() {
@@ -53,7 +54,7 @@ fn main() {
     }
 
     //  Clear screen and disable raw mode before exiting
-    utils::clear_screen();
-    utils::cursor_move_to(0, 0);
+    ansi::clear_screen();
+    ansi::cursor_move_to(0, 0);
     terminal::disable_raw_mode().unwrap();
 }

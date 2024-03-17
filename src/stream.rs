@@ -1,3 +1,4 @@
+use crate::ansi;
 use crate::entity::Entity;
 use crate::utils;
 
@@ -20,7 +21,7 @@ pub struct Stream {
     count: u16,
 
     /// Stream entity color
-    color: utils::RGBColor,
+    color: ansi::RGBColor,
 
     /// Mode
     mode: utils::Mode,
@@ -33,7 +34,7 @@ impl Stream {
         y: i32,
         min_count: u16,
         max_count: u16,
-        color: utils::RGBColor,
+        color: ansi::RGBColor,
         mode: utils::Mode,
     ) -> Self {
         let mut s = Stream {

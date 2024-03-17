@@ -1,4 +1,5 @@
 //  Library
+use crate::ansi;
 use crate::config;
 use crate::utils;
 
@@ -15,7 +16,7 @@ pub struct Entity {
     /// rain-fall speed
     speed: i32,
     /// entity color
-    color: utils::RGBColor,
+    color: ansi::RGBColor,
     /// entity symbol
     symbol: char,
     /// character set mode
@@ -32,7 +33,7 @@ impl Entity {
         x: i32,
         y: i32,
         speed: i32,
-        color: utils::RGBColor,
+        color: ansi::RGBColor,
         mode: utils::Mode,
         is_first: bool,
     ) -> Self {
@@ -94,8 +95,8 @@ impl Entity {
         }
 
         //  Move cursor to position and write symbol
-        utils::cursor_move_to(self.y as u32, self.x as u32);
-        print!("{}", utils::rgb(&self.symbol, self.color));
+        ansi::cursor_move_to(self.y as u32, self.x as u32);
+        print!("{}", ansi::rgb(&self.symbol, self.color));
 
         //  Switch symbol if frame_count exceeds switch_interval
         if self.frame_count % self.switch_interval == 0 {
@@ -108,9 +109,9 @@ impl Entity {
     pub fn clean(&self, rows: u32) {
         let last_y = self.y - self.speed;
         if last_y <= 0 {
-            utils::cursor_move_to(rows, self.x as u32)
+            ansi::cursor_move_to(rows, self.x as u32)
         } else {
-            utils::cursor_move_to(last_y as u32, self.x as u32);
+            ansi::cursor_move_to(last_y as u32, self.x as u32);
         }
         match self.mode {
             utils::Mode::Original => print!("  "),

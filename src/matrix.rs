@@ -3,17 +3,22 @@ use crate::config;
 use crate::stream::Stream;
 use crate::utils;
 
-//  =======
-//  STREAMS
-//  =======
+//  ======
+//  MATRIX
+//  ======
 
-pub struct Streams {
+/// The structure that represents the Matrix
+pub struct Matrix {
+    // Number of rows
     rows: u16,
+    // Number of columns
     columns: u16,
+    // Collection of streams
     streams: Vec<Stream>,
 }
 
-impl Streams {
+impl Matrix {
+    /// Construct a new Matrix instance
     pub fn new(rows: u16, columns: u16, config: &config::Config) -> Self {
         // Instantiate Self
         let mut ret = Self {
@@ -22,23 +27,25 @@ impl Streams {
             streams: Vec::new(),
         };
 
-        //  Generate stream entities
+        //  Generate a stream for each column
         for c in 0..ret.columns {
+            // Space out the streams, if specified
             if c % config.stream_spacing != 0 {
                 continue;
             }
-            //  Generate a stream
+            //  Generate the stream
             let height_offset = utils::random_between(-50, 0);
             let stream = Stream::new(c as i32, height_offset, config);
 
-            //  Add stream to streams collection
+            //  Add stream to vector collection
             ret.streams.push(stream);
         }
 
+        // Return the instance
         return ret;
     }
 
-    /// Render all streams
+    /// Render the Matrix
     pub fn render(&mut self, config: &config::Config) {
         for stream in self.streams.iter_mut() {
             stream.render(self.rows as i32, config);

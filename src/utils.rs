@@ -1,18 +1,34 @@
 //  Library
 use rand::Rng;
+use std::str::FromStr;
 
 //  =========
 //  UTILITIES
 //  =========
 
 //  Matrix mode determines the character set to use for the entities
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, Debug)]
 #[allow(dead_code)]
 pub enum Mode {
     Original,
     Binary,
     ASCII,
     Braille,
+}
+
+// Implement the FromStr trait for Mode to parse the command-line argument
+impl FromStr for Mode {
+    type Err = anyhow::Error;
+
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s.to_lowercase().as_str() {
+            "original" => Ok(Mode::Original),
+            "binary" => Ok(Mode::Binary),
+            "ascii" => Ok(Mode::ASCII),
+            "braille" => Ok(Mode::Braille),
+            _ => Err(anyhow::Error::msg("Invalid Mode")),
+        }
+    }
 }
 
 /// Generate a random number between min and max

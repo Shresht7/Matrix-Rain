@@ -29,25 +29,18 @@ pub struct Entity {
 
 impl Entity {
     /// Entity constructor
-    pub fn new(
-        x: i32,
-        y: i32,
-        speed: i32,
-        color: ansi::RGBColor,
-        mode: utils::Mode,
-        is_first: bool,
-    ) -> Self {
+    pub fn new(x: i32, y: i32, speed: i32, is_first: bool, config: &config::Config) -> Self {
         return Self {
             x,
             y,
             speed,
             color: if is_first {
-                config::LEADING_ENTITY_COLOR
+                config.leading_entity_color
             } else {
-                color
+                config.stream_color
             },
             symbol: ' ',
-            mode,
+            mode: config.mode,
             frame_count: 0,
             switch_interval: utils::random_between::<u16>(1, 60),
         };

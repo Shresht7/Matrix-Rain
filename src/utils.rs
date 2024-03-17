@@ -5,47 +5,12 @@ use rand::Rng;
 //  UTILITIES
 //  =========
 
-/// ANSI RGB Color Tuple Struct (Red, Green, Blue)
-#[derive(Clone, Copy)]
-pub struct RGBColor(pub i32, pub i32, pub i32);
-
-//  Matrix mode determines the character set to use for the entities
-#[derive(Clone, Copy)]
-#[allow(dead_code)]
-pub enum Mode {
-    Original,
-    Binary,
-    ASCII,
-    Braille,
-}
-
 /// Generate a random number between min and max
 pub fn random_between<T: PartialOrd + rand::distributions::uniform::SampleUniform>(
     min: T,
     max: T,
 ) -> T {
     rand::thread_rng().gen_range(min..max)
-}
-
-/// Clear the entire screen
-pub fn clear_screen() {
-    print!("\u{001b}[2J")
-}
-
-/// Move cursor to position
-pub fn cursor_move_to(r: u32, c: u32) {
-    print!("\u{001b}[{};{}H", r, c);
-}
-
-/// Color string with ANSI RGB color code
-pub fn rgb(s: &char, color: RGBColor) -> String {
-    format!(
-        "\u{001b}[38;2;{};{};{}m{}\u{001b}[0m",
-        color.0,
-        color.1,
-        color.2,
-        s.to_string()
-    )
 }
 
 // #[cfg(tests)]
@@ -73,6 +38,7 @@ mod tests {
     fn type_of<T>(_: &T) -> &str {
         std::any::type_name::<T>()
     }
+
     #[test]
     fn random_i32s_return_i32() {
         let number = super::random_between(-15, 32);

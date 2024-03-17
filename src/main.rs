@@ -1,37 +1,34 @@
+mod ansi;
 mod config;
 mod entity;
 mod stream;
 mod streams;
 mod utils;
 
-use std::time::Duration;
-
-use streams::Streams;
-
+use clap::Parser;
 use crossterm::{event, terminal};
+use std::time::Duration;
+use streams::Streams;
 
 //  ====
 //  MAIN
 //  ====
 
 fn main() {
+    //  Parse command-line arguments
+    let config = config::Config::parse();
+
     //  Get Terminal Window Size
     let (columns, rows) = terminal::size().unwrap_or((40, 120));
 
     //  Instantiate streams
-    let mut streams = Streams::new(
-        columns,
-        config::STREAM_MIN_COUNT,
-        config::STREAM_MAX_COUNT,
-        config::MODE,
-        config::STREAM_COLOR,
-    );
+    let mut streams = Streams::new(columns, &config);
 
     // Switch to the alternate screen buffer
     terminal::enable_raw_mode().unwrap();
 
     //  Render the Matrix-Rain on screen
-    utils::clear_screen();
+    ansi::clear_screen();
     loop {
         // Check if 'q' or Ctrl+C has been pressed
         if event::poll(Duration::from_millis(0)).unwrap() {
@@ -46,14 +43,14 @@ fn main() {
         }
 
         //  Render each stream
-        streams.render(rows);
+        streams.render(rows, &config);
 
         //  Sleep for 1/FPS seconds
-        std::thread::sleep(Duration::from_millis(1000 / config::FPS));
+        std::thread::sleep(Duration::from_millis(1000 / config.fps));
     }
 
     //  Clear screen and disable raw mode before exiting
-    utils::clear_screen();
-    utils::cursor_move_to(0, 0);
+    ansi::clear_screen();
+    ansi::cursor_move_to(0, 0);
     terminal::disable_raw_mode().unwrap();
 }

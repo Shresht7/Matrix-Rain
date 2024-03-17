@@ -1,25 +1,38 @@
 //  Library
-use crate::utils;
+use crate::ansi;
+use crate::entity;
+use clap::Parser;
 
 //  =============
 //  CONFIGURATION
 //  =============
 
-/// Color of the leading entity in a stream
-pub const LEADING_ENTITY_COLOR: utils::RGBColor = utils::RGBColor(200, 255, 200);
+#[derive(Parser, Debug)]
+#[command(version, about, long_about = "None")]
+pub struct Config {
+    /// Color of the leading entity in a stream
+    #[clap(long, default_value = "200,255,200")]
+    pub leading_entity_color: ansi::RGBColor,
 
-/// Minimum and Maximum number of entities per stream
-pub const STREAM_MIN_COUNT: u16 = 5;
-pub const STREAM_MAX_COUNT: u16 = 25;
+    /// Minimum and Maximum number of entities per stream
+    #[clap(long, default_value = "5")]
+    pub stream_min_count: u16,
+    #[clap(long, default_value = "25")]
+    pub stream_max_count: u16,
 
-/// Default color of the streaming entities
-pub const STREAM_COLOR: utils::RGBColor = utils::RGBColor(0, 255, 70);
+    /// Default color of the streaming entities
+    #[clap(long, default_value = "0,255,70")]
+    pub stream_color: ansi::RGBColor,
 
-/// Stream Spacing
-pub const STREAM_SPACING: u16 = 2;
+    /// Stream Spacing
+    #[clap(long, default_value = "2")]
+    pub stream_spacing: u16,
 
-/// Frame-Rate
-pub const FPS: u64 = 15;
+    /// Frame-Rate
+    #[clap(long, default_value = "15")]
+    pub fps: u64,
 
-/// Character Symbol Set
-pub const MODE: utils::Mode = utils::Mode::Original;
+    /// Character Symbol Set
+    #[clap(long, default_value = "Original")]
+    pub mode: entity::Mode,
+}

@@ -1,3 +1,4 @@
+use crate::config;
 use crate::entity::Entity;
 use crate::utils;
 
@@ -18,43 +19,28 @@ pub struct Stream {
 
     /// Count of entities
     count: u16,
-
-    /// Stream entity color
-    color: utils::RGBColor,
-
-    /// Mode
-    mode: utils::Mode,
 }
 
 impl Stream {
     /// Construct new stream
-    pub fn new(
-        x: i32,
-        y: i32,
-        min_count: u16,
-        max_count: u16,
-        color: utils::RGBColor,
-        mode: utils::Mode,
-    ) -> Self {
+    pub fn new(x: i32, y: i32, config: &config::Config) -> Self {
         let mut s = Stream {
             entities: Vec::new(),
             x,
             y,
             speed: 1,
-            count: utils::random_between(min_count, max_count),
-            color,
-            mode,
+            count: utils::random_between(config.stream_min_count, config.stream_max_count),
         };
-        s.generate_entities();
+        s.generate_entities(config);
         return s;
     }
 
     /// Generate stream entities
-    pub fn generate_entities(&mut self) {
+    pub fn generate_entities(&mut self, config: &config::Config) {
         self.entities.clear();
         let mut y = self.y;
         for i in 0..self.count {
-            let mut e = Entity::new(self.x, y, self.speed, self.color.clone(), self.mode, i == 0);
+            let mut e = Entity::new(self.x, y, self.speed, i == 0, config);
             e.set_symbol();
             self.entities.push(e);
             y -= 1;
@@ -62,7 +48,7 @@ impl Stream {
     }
 
     /// Render stream
-    pub fn render(&mut self, rows: i32) {
+    pub fn render(&mut self, rows: i32, config: &config::Config) {
         for entity in self.entities.iter_mut() {
             entity.rain();
             entity.render();
@@ -72,7 +58,7 @@ impl Stream {
             Some(e) => {
                 e.clean(rows as u32);
                 if e.y >= rows {
-                    self.generate_entities();
+                    self.generate_entities(&config);
                 }
             }
             _ => {}

@@ -35,15 +35,13 @@ impl Stream {
         return s;
     }
 
-    /// Generate stream entities
+    /// Generate the entities that constitute the stream
     pub fn generate_entities(&mut self, config: &config::Config) {
         self.entities.clear();
-        let mut y = self.y;
         for i in 0..self.count {
-            let mut e = Entity::new(self.x, y, self.speed, i == 0, config);
+            let mut e = Entity::new(self.x, self.y - 1, self.speed, i == 0, config);
             e.set_symbol();
             self.entities.push(e);
-            y -= 1;
         }
     }
 

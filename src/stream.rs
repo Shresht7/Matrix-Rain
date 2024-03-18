@@ -94,26 +94,28 @@ impl Stream {
         }
     }
 
-    /// Render stream
+    /// Render the stream
     pub fn render(&mut self, rows: i32, config: &config::Config) {
+        // Check the last entity of the stream ...
+        if let Some(e) = self.entities.last() {
+            // Clean up the last entity. As the stream moves down, all entities will be overwritten
+            // by the next frame, except for the trailing entity. So we manually overwrite it so that
+            // the stream doesn't leave a trail.
+            ansi::cursor_move_to(e.y as u32, e.x as u32);
+            print!(" ");
+
+            // This is also a good time to check if the last entity is off screen,
+            // (i.e. the y position is greater than the number of rows)
+            // and if it is, we regenerate the stream and place it back at the top.
+            if e.y >= rows as f32 {
+                self.generate_entities(&config);
+            }
+        }
+
         // Move the stream down and render each entity
         for entity in self.entities.iter_mut() {
             entity.rain();
             entity.render();
-        }
-
-        // Clean up the last entity and regenerate when it's off the screen
-        match self.entities.last() {
-            Some(e) => {
-                // Clean up the last entity
-                e.clean(rows as u32);
-                // Regenerate the stream and place it at the top if the last entity is off the screen
-                // (i.e. the y position is greater than the number of rows).
-                if e.y >= rows as f32 {
-                    self.generate_entities(&config);
-                }
-            }
-            _ => {}
         }
     }
 }

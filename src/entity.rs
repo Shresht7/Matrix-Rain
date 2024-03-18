@@ -70,20 +70,4 @@ impl Entity {
         }
         self.frame_count += 1;
     }
-
-    /// Cleans the last position of this entity
-    pub fn clean(&self, rows: u32) {
-        let last_y = self.y - self.speed;
-        if last_y <= 0.0 {
-            ansi::cursor_move_to(rows, self.x as u32)
-        } else {
-            ansi::cursor_move_to(last_y as u32, self.x as u32);
-        }
-        match self.mode {
-            symbols::Symbols::Original => print!("  "),
-            symbols::Symbols::ASCII => print!(" "),
-            symbols::Symbols::Binary => print!(" "),
-            symbols::Symbols::Braille => print!(" "),
-        }
-    }
 }

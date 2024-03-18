@@ -1,6 +1,6 @@
 //  Library
 use crate::ansi;
-use crate::entity;
+use crate::symbols;
 use clap::Parser;
 
 //  =============
@@ -12,7 +12,7 @@ use clap::Parser;
 pub struct Config {
     /// Character Symbol Set
     #[clap(long, default_value = "Original")]
-    pub mode: entity::Symbols,
+    pub mode: symbols::Symbols,
 
     /// Default color of the streaming entities
     #[clap(long, default_value = "0,255,70")]

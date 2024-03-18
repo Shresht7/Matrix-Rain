@@ -3,6 +3,7 @@ mod config;
 mod entity;
 mod matrix;
 mod stream;
+mod symbols;
 mod utils;
 
 use clap::Parser;

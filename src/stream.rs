@@ -13,12 +13,12 @@ pub struct Stream {
     pub entities: Vec<Entity>,
 
     // X Position
-    x: i32,
+    x: f32,
     // Y Position
-    y: i32,
+    y: f32,
 
     /// Speed
-    speed: i32,
+    speed: f32,
 
     /// Count of entities
     count: u16,
@@ -26,12 +26,12 @@ pub struct Stream {
 
 impl Stream {
     /// Construct new stream
-    pub fn new(x: i32, y: i32, config: &config::Config) -> Self {
+    pub fn new(x: f32, y: f32, config: &config::Config) -> Self {
         let mut stream = Stream {
             entities: Vec::new(),
             x,
             y,
-            speed: 1,
+            speed: utils::random_between(0.125, 1.0),
             count: utils::random_between(config.stream_min_count, config.stream_max_count),
         };
         stream.generate_entities(config);
@@ -49,7 +49,7 @@ impl Stream {
 
         // Create the following entities
         for i in 1..self.count {
-            let mut e = Entity::new(self.x, self.y - i as i32, self.speed, config);
+            let mut e = Entity::new(self.x, self.y - i as f32, self.speed, config);
             e.set_symbol();
             self.entities.push(e);
         }
@@ -70,7 +70,7 @@ impl Stream {
                 e.clean(rows as u32);
                 // Regenerate the stream and place it at the top if the last entity is off the screen
                 // (i.e. the y position is greater than the number of rows).
-                if e.y >= rows {
+                if e.y >= rows as f32 {
                     self.generate_entities(&config);
                 }
             }

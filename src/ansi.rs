@@ -21,7 +21,7 @@ pub fn cursor_move_to(r: u32, c: u32) {
 
 /// ANSI RGB Color Tuple Struct (Red, Green, Blue)
 #[derive(Clone, Copy, Debug)]
-pub struct RGBColor(pub i32, pub i32, pub i32);
+pub struct RGBColor(pub u8, pub u8, pub u8);
 
 // Implement the FromStr trait for RGBColor to parse the command-line argument
 impl FromStr for RGBColor {
@@ -35,9 +35,9 @@ impl FromStr for RGBColor {
         }
 
         Ok(RGBColor(
-            parts[0].parse::<i32>()?,
-            parts[1].parse::<i32>()?,
-            parts[2].parse::<i32>()?,
+            parts[0].parse()?,
+            parts[1].parse()?,
+            parts[2].parse()?,
         ))
     }
 }

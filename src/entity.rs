@@ -1,5 +1,6 @@
 //  Library
 use crate::ansi;
+use crate::ansi::RGBColor;
 use crate::config;
 use crate::utils;
 use std::str::FromStr;
@@ -58,25 +59,12 @@ pub struct Entity {
 
 impl Entity {
     /// Entity constructor
-    pub fn new(x: f32, y: f32, speed: f32, config: &config::Config) -> Self {
+    pub fn new(x: f32, y: f32, speed: f32, color: RGBColor, config: &config::Config) -> Self {
         return Self {
             x,
             y,
             speed,
-            color: config.stream_color,
-            symbol: ' ',
-            mode: config.mode,
-            frame_count: 0,
-            switch_interval: utils::random_between::<u16>(1, 60),
-        };
-    }
-
-    pub fn new_leader(x: f32, y: f32, speed: f32, config: &config::Config) -> Self {
-        return Self {
-            x,
-            y,
-            speed,
-            color: config.leading_entity_color,
+            color,
             symbol: ' ',
             mode: config.mode,
             frame_count: 0,

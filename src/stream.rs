@@ -50,12 +50,23 @@ impl Stream {
         self.count = utils::random_between(config.stream_min_count, config.stream_max_count);
 
         // Create the leading entity
-        self.entities
-            .push(Entity::new_leader(self.x, self.y, self.speed, config));
+        self.entities.push(Entity::new(
+            self.x,
+            self.y,
+            self.speed,
+            config.leading_entity_color,
+            config,
+        ));
 
         // Create the following entities
         for i in 1..self.count {
-            let mut e = Entity::new(self.x, self.y - i as f32, self.speed, config);
+            let mut e = Entity::new(
+                self.x,
+                self.y - i as f32,
+                self.speed,
+                config.stream_color,
+                config,
+            );
             e.set_symbol();
             self.entities.push(e);
         }

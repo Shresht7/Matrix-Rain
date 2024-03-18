@@ -37,7 +37,7 @@ impl Entity {
             speed,
             color,
             symbol: ' ',
-            mode: config.mode,
+            mode: config.mode.clone(),
             frame_count: 0,
             switch_interval: utils::random_between::<u16>(1, 60),
         };

@@ -7,13 +7,14 @@ use std::str::FromStr;
 // =======
 
 ///  The character symbol set to use for the entities
-#[derive(Clone, Copy, Debug)]
+#[derive(Clone, Debug)]
 pub enum Symbols {
-    Original, //  Katakana
-    Binary,   //  0 or 1
-    ASCII,    //  ASCII
-    Braille,  //  Braille
-    Cursed,   //  Emoji
+    Original,       //  Katakana
+    Binary,         //  0 or 1
+    ASCII,          //  ASCII
+    Braille,        //  Braille
+    Cursed,         //  Emoji
+    Custom(String), //  Custom
 }
 
 impl FromStr for Symbols {
@@ -29,8 +30,7 @@ impl FromStr for Symbols {
             "braille" => Ok(Symbols::Braille),
             "emoji" => Ok(Symbols::Cursed),
             "cursed" => Ok(Symbols::Cursed),
-            // TODO: Custom Symbols
-            _ => Err(anyhow::Error::msg("Invalid Symbol Set. Please select from 'original', 'binary', 'ascii', or 'braille'")),
+            x => Ok(Symbols::Custom(x.to_string())),
         }
     }
 }
@@ -67,6 +67,12 @@ impl Symbols {
             Symbols::Cursed => {
                 let r = utils::random_between(0x1f300, 0x1f3f0) as u32;
                 return std::char::from_u32(r).unwrap_or('0');
+            }
+
+            //  Custom Symbols
+            Symbols::Custom(s) => {
+                let r = utils::random_between(0, s.len());
+                return s.chars().nth(r).unwrap_or('0');
             }
         }
     }

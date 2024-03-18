@@ -1,7 +1,9 @@
 // Library
+use crate::ansi;
 use crate::config;
 use crate::entity::Entity;
 use crate::utils;
+use colorgrad::{self, Color};
 
 //  ======
 //  STREAM
@@ -50,12 +52,43 @@ impl Stream {
         self.count = utils::random_between(config.stream_min_count, config.stream_max_count);
 
         // Create the leading entity
-        self.entities
-            .push(Entity::new_leader(self.x, self.y, self.speed, config));
+        self.entities.push(Entity::new(
+            self.x,
+            self.y,
+            self.speed,
+            config.leading_entity_color,
+            config,
+        ));
+
+        // Create the color gradient for the stream
+        let gradient = colorgrad::CustomGradient::new()
+            .colors(&[
+                Color::from_rgba8(
+                    config.stream_color.0,
+                    config.stream_color.1,
+                    config.stream_color.2,
+                    255,
+                ),
+                Color::from_rgba8(
+                    (config.stream_color.0 as f32 * 0.33).floor() as u8,
+                    (config.stream_color.1 as f32 * 0.33).floor() as u8,
+                    (config.stream_color.2 as f32 * 0.33).floor() as u8,
+                    255,
+                ),
+            ])
+            .build()
+            .unwrap();
 
         // Create the following entities
         for i in 1..self.count {
-            let mut e = Entity::new(self.x, self.y - i as f32, self.speed, config);
+            // Determine the color of the entity based on the gradient
+            let color = {
+                let [r, g, b, _] = gradient.at(i as f64 / self.count as f64).to_rgba8();
+                ansi::RGBColor(r, g, b)
+            };
+
+            // Create the entity and add it to the entities vector
+            let mut e = Entity::new(self.x, self.y - i as f32, self.speed, color, config);
             e.set_symbol();
             self.entities.push(e);
         }

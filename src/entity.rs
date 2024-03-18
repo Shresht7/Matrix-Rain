@@ -22,6 +22,8 @@ impl FromStr for Symbols {
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         match s.to_lowercase().as_str() {
             "original" => Ok(Symbols::Original),
+            "katakana" => Ok(Symbols::Original),
+            "normal" => Ok(Symbols::Original),
             "binary" => Ok(Symbols::Binary),
             "ascii" => Ok(Symbols::ASCII),
             "braille" => Ok(Symbols::Braille),

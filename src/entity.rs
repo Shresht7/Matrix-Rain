@@ -45,31 +45,7 @@ impl Entity {
 
     /// Set Entity Symbol
     pub fn set_symbol(&mut self) {
-        match self.mode {
-            //  Katakana Symbols
-            symbols::Symbols::Original => {
-                let r = utils::random_between(0x30a0, 0x30a0 + 96) as u32;
-                self.symbol = std::char::from_u32(r).unwrap_or('0');
-            }
-
-            //  Binary Symbols
-            symbols::Symbols::Binary => {
-                let r = utils::random_between(0, 2);
-                self.symbol = if r == 0 { '0' } else { '1' };
-            }
-
-            //  ASCII Symbols
-            symbols::Symbols::ASCII => {
-                let r = utils::random_between(33, 127) as u32;
-                self.symbol = std::char::from_u32(r).unwrap_or('0');
-            }
-
-            //  Braille Symbols
-            symbols::Symbols::Braille => {
-                let r = utils::random_between(0x2840, 0x2840 + 63) as u32;
-                self.symbol = std::char::from_u32(r).unwrap_or('0');
-            }
-        }
+        self.symbol = self.mode.get_random();
     }
 
     /// Rain

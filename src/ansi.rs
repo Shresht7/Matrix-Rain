@@ -16,6 +16,16 @@ pub fn cursor_move_to(r: u32, c: u32) {
     print!("\u{001b}[{};{}H", r, c);
 }
 
+// Hide the cursor
+pub fn hide_cursor() {
+    print!("\u{001b}[?25l");
+}
+
+// Show the cursor
+pub fn show_cursor() {
+    print!("\u{001b}[?25h");
+}
+
 // RGB COLOR
 // ---------
 

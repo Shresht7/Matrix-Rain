@@ -28,6 +28,7 @@ fn main() {
 
     //  Render the Matrix-Rain on screen
     ansi::clear_screen();
+    ansi::hide_cursor();
     loop {
         // Check if 'q' or Ctrl+C has been pressed
         if event::poll(Duration::from_millis(0)).unwrap() {
@@ -51,5 +52,6 @@ fn main() {
     //  Clear screen and disable raw mode before exiting
     ansi::clear_screen();
     ansi::cursor_move_to(0, 0);
+    ansi::show_cursor();
     terminal::disable_raw_mode().unwrap();
 }

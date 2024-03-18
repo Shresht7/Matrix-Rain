@@ -12,7 +12,7 @@ use clap::Parser;
 pub struct Config {
     /// Character Symbol Set
     #[clap(long, default_value = "Original")]
-    pub mode: entity::Mode,
+    pub mode: entity::Symbols,
 
     /// Default color of the streaming entities
     #[clap(long, default_value = "0,255,70")]

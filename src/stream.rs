@@ -53,6 +53,12 @@ impl Stream {
             e.set_symbol();
             self.entities.push(e);
         }
+
+        // Randomize the speed
+        self.speed = utils::random_between(0.125, 1.0);
+
+        // Randomize the count
+        self.count = utils::random_between(config.stream_min_count, config.stream_max_count);
     }
 
     /// Render stream

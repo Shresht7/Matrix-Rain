@@ -29,7 +29,7 @@ pub struct Config {
     pub stream_spacing: u16,
 
     /// Frame-Rate
-    #[clap(long, default_value = "15")]
+    #[clap(long, default_value = "60")]
     pub fps: u64,
 
     /// Character Symbol Set

@@ -39,11 +39,11 @@ impl FromStr for Mode {
 /// Represents a single entity in the matrix-stream
 pub struct Entity {
     /// x position
-    pub x: i32,
+    pub x: f32,
     /// y position
-    pub y: i32,
+    pub y: f32,
     /// rain-fall speed
-    speed: i32,
+    speed: f32,
     /// entity color
     color: ansi::RGBColor,
     /// entity symbol
@@ -58,7 +58,7 @@ pub struct Entity {
 
 impl Entity {
     /// Entity constructor
-    pub fn new(x: i32, y: i32, speed: i32, config: &config::Config) -> Self {
+    pub fn new(x: f32, y: f32, speed: f32, config: &config::Config) -> Self {
         return Self {
             x,
             y,
@@ -71,7 +71,7 @@ impl Entity {
         };
     }
 
-    pub fn new_leader(x: i32, y: i32, speed: i32, config: &config::Config) -> Self {
+    pub fn new_leader(x: f32, y: f32, speed: f32, config: &config::Config) -> Self {
         return Self {
             x,
             y,
@@ -121,7 +121,7 @@ impl Entity {
     /// Render entity on screen
     pub fn render(&mut self) {
         //  Don't render if y is above screen
-        if self.y < 0 {
+        if self.y < 0.0 {
             return;
         }
 
@@ -139,7 +139,7 @@ impl Entity {
     /// Cleans the last position of this entity
     pub fn clean(&self, rows: u32) {
         let last_y = self.y - self.speed;
-        if last_y <= 0 {
+        if last_y <= 0.0 {
             ansi::cursor_move_to(rows, self.x as u32)
         } else {
             ansi::cursor_move_to(last_y as u32, self.x as u32);

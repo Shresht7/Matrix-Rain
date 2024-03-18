@@ -13,6 +13,7 @@ pub enum Symbols {
     Binary,   //  0 or 1
     ASCII,    //  ASCII
     Braille,  //  Braille
+    Cursed,   //  Emoji
 }
 
 impl FromStr for Symbols {
@@ -26,6 +27,9 @@ impl FromStr for Symbols {
             "binary" => Ok(Symbols::Binary),
             "ascii" => Ok(Symbols::ASCII),
             "braille" => Ok(Symbols::Braille),
+            "emoji" => Ok(Symbols::Cursed),
+            "cursed" => Ok(Symbols::Cursed),
+            // TODO: Custom Symbols
             _ => Err(anyhow::Error::msg("Invalid Symbol Set. Please select from 'original', 'binary', 'ascii', or 'braille'")),
         }
     }
@@ -56,6 +60,12 @@ impl Symbols {
             //  Braille Symbols
             Symbols::Braille => {
                 let r = utils::random_between(0x2840, 0x2840 + 63) as u32;
+                return std::char::from_u32(r).unwrap_or('0');
+            }
+
+            //  (Cursed) Emoji Symbols
+            Symbols::Cursed => {
+                let r = utils::random_between(0x1f300, 0x1f3f0) as u32;
                 return std::char::from_u32(r).unwrap_or('0');
             }
         }

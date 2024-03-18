@@ -31,8 +31,8 @@ impl Stream {
             entities: Vec::new(),
             x,
             y,
-            speed: utils::random_between(0.125, 1.0),
-            count: utils::random_between(config.stream_min_count, config.stream_max_count),
+            speed: 1.0,
+            count: 10,
         };
         stream.generate_entities(config);
         return stream;
@@ -42,6 +42,12 @@ impl Stream {
     pub fn generate_entities(&mut self, config: &config::Config) {
         // Empty the entities vector
         self.entities.clear();
+
+        // Randomize the speed
+        self.speed = utils::random_between(0.125, 1.0);
+
+        // Randomize the count
+        self.count = utils::random_between(config.stream_min_count, config.stream_max_count);
 
         // Create the leading entity
         self.entities
@@ -53,12 +59,6 @@ impl Stream {
             e.set_symbol();
             self.entities.push(e);
         }
-
-        // Randomize the speed
-        self.speed = utils::random_between(0.125, 1.0);
-
-        // Randomize the count
-        self.count = utils::random_between(config.stream_min_count, config.stream_max_count);
     }
 
     /// Render stream

@@ -13,7 +13,7 @@ pub fn random_between<T: PartialOrd + rand::distributions::uniform::SampleUnifor
     rand::thread_rng().gen_range(min..max)
 }
 
-// #[cfg(tests)]
+#[cfg(test)]
 mod tests {
 
     #[test]

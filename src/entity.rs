@@ -1,6 +1,5 @@
 //  Library
 use crate::ansi;
-use crate::ansi::RGBColor;
 use crate::config;
 use crate::utils;
 use std::str::FromStr;
@@ -59,7 +58,7 @@ pub struct Entity {
 
 impl Entity {
     /// Entity constructor
-    pub fn new(x: f32, y: f32, speed: f32, color: RGBColor, config: &config::Config) -> Self {
+    pub fn new(x: f32, y: f32, speed: f32, color: ansi::RGBColor, config: &config::Config) -> Self {
         return Self {
             x,
             y,

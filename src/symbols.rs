@@ -1,6 +1,6 @@
-// Library
-use crate::utils;
 use std::str::FromStr;
+
+use crate::utils;
 
 // =======
 // SYMBOLS
@@ -9,27 +9,32 @@ use std::str::FromStr;
 ///  The character symbol set to use for the entities
 #[derive(Clone, Debug)]
 pub enum Symbols {
-    Original,       //  Katakana
-    Binary,         //  0 or 1
-    ASCII,          //  ASCII
-    Braille,        //  Braille
-    Cursed,         //  Emoji
-    Custom(String), //  Custom
+    ///  Katakana Symbols: Unicode range from 0x30A0 to 0x30A0 + 96 (96 Katakana characters)
+    Original,
+    ///  Binary Symbols: Only '0' and '1'
+    Binary,
+    /// ASCII Symbols: Printable characters from 33 to 126 (0x21 to 0x7E). (from '!' to '~', including A-Z, a-z, 0-9 etc.)
+    ASCII,
+    /// Braille Symbols: Unicode range from 0x2840 to 0x2840 + 63 (64 Braille patterns)
+    Braille,
+    /// Emoji (Cursed) Symbols: Unicode range from 0x1F300 to 0x1F3F0 (various emojis)
+    Cursed,
+    /// Custom Symbols: User-defined symbol set
+    Custom(String),
 }
+
+// TODO: Add support for mathematical symbols
 
 impl FromStr for Symbols {
     type Err = anyhow::Error;
     /// Parse a string to a Symbol Set
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         match s.to_lowercase().as_str() {
-            "original" => Ok(Symbols::Original),
-            "katakana" => Ok(Symbols::Original),
-            "normal" => Ok(Symbols::Original),
-            "binary" => Ok(Symbols::Binary),
-            "ascii" => Ok(Symbols::ASCII),
-            "braille" => Ok(Symbols::Braille),
-            "emoji" => Ok(Symbols::Cursed),
-            "cursed" => Ok(Symbols::Cursed),
+            "original" | "normal" | "katakana" => Ok(Symbols::Original),
+            "binary" | "bin" => Ok(Symbols::Binary),
+            "ascii" | "text" | "english" => Ok(Symbols::ASCII),
+            "braille" | "dots" => Ok(Symbols::Braille),
+            "emoji" | "cursed" => Ok(Symbols::Cursed),
             x => Ok(Symbols::Custom(x.to_string())),
         }
     }
@@ -39,37 +44,37 @@ impl Symbols {
     /// Get a random character from the symbol set
     pub fn get_random(&self) -> char {
         match self {
-            //  Katakana Symbols
+            // Katakana Symbols: Unicode range from 0x30A0 to 0x30A0 + 96 (96 Katakana characters)
             Symbols::Original => {
                 let r = utils::random_number_between(0x30a0, 0x30a0 + 96) as u32;
                 return std::char::from_u32(r).unwrap_or('0');
             }
 
-            //  Binary Symbols
+            // Binary Symbols: Only '0' and '1'
             Symbols::Binary => {
                 let r = utils::random_number_between(0, 2);
                 return if r == 0 { '0' } else { '1' };
             }
 
-            //  ASCII Symbols
+            // ASCII Symbols: Printable characters from 33 to 126 (0x21 to 0x7E). (from '!' to '~', including A-Z, a-z, 0-9 etc.)
             Symbols::ASCII => {
                 let r = utils::random_number_between(33, 127) as u32;
                 return std::char::from_u32(r).unwrap_or('0');
             }
 
-            //  Braille Symbols
+            // Braille Symbols: Unicode range from 0x2840 to 0x2840 + 63 (64 Braille patterns)
             Symbols::Braille => {
                 let r = utils::random_number_between(0x2840, 0x2840 + 63) as u32;
                 return std::char::from_u32(r).unwrap_or('0');
             }
 
-            //  (Cursed) Emoji Symbols
+            // Emoji (Cursed) Symbols: Unicode range from 0x1F300 to 0x1F3F0 (various emojis)
             Symbols::Cursed => {
                 let r = utils::random_number_between(0x1f300, 0x1f3f0) as u32;
                 return std::char::from_u32(r).unwrap_or('0');
             }
 
-            //  Custom Symbols
+            // Custom Symbols: User-defined symbol set
             Symbols::Custom(s) => {
                 let r = utils::random_number_between(0, s.len());
                 return s.chars().nth(r).unwrap_or('0');

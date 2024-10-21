@@ -33,7 +33,6 @@ mod tests {
     }
 
     /// Returns the type of the variable
-    #[allow(dead_code)]
     fn type_of<T>(_: &T) -> &str {
         std::any::type_name::<T>()
     }

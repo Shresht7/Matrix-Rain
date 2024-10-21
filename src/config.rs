@@ -8,7 +8,7 @@ use clap::Parser;
 //  =============
 
 #[derive(Parser, Debug)]
-#[command(version, about, long_about = "None")]
+#[command(version, about)]
 pub struct Config {
     /// Character Symbol Set
     #[clap(long, default_value = "Original")]

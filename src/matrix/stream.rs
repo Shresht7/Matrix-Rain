@@ -1,9 +1,10 @@
-// Library
+use colorgrad::{self, Color};
+
 use crate::ansi;
 use crate::config;
-use crate::entity::Entity;
 use crate::utils;
-use colorgrad::{self, Color};
+
+use super::entity::Entity;
 
 //  ======
 //  STREAM

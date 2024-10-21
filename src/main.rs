@@ -9,10 +9,8 @@ use crossterm::{
 
 mod ansi;
 mod config;
-mod entity;
 mod events;
 mod matrix;
-mod stream;
 mod symbols;
 mod utils;
 
@@ -42,7 +40,7 @@ fn run(config: &config::Config) -> Result<(), Box<dyn std::error::Error>> {
     //  Get Terminal Window Size to determine the number of rows and columns
     let (columns, rows) = terminal::size()?;
 
-    //  Instantiate streams
+    //  Instantiate the matrix streams
     let mut matrix = matrix::Matrix::new(rows, columns, &config);
 
     // Setup the terminal before running the application

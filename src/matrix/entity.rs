@@ -1,8 +1,8 @@
-//  Library
 use crate::ansi;
 use crate::config;
-use crate::symbols;
 use crate::utils;
+
+use super::symbols;
 
 //  ======
 //  ENTITY

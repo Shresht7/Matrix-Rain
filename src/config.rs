@@ -1,7 +1,7 @@
-//  Library
+use clap::Parser;
+
 use crate::ansi;
 use crate::symbols;
-use clap::Parser;
 
 //  =============
 //  CONFIGURATION

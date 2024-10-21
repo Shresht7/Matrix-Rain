@@ -1,7 +1,9 @@
-//  Library
-use crate::config;
-use crate::stream::Stream;
-use crate::utils;
+use super::{config, symbols, utils};
+
+mod entity;
+mod stream;
+
+use stream::Stream;
 
 //  ======
 //  MATRIX

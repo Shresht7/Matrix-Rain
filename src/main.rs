@@ -1,4 +1,4 @@
-use std::{io::Write, time::Duration};
+use std::io::Write;
 
 use clap::Parser;
 use crossterm::{
@@ -59,7 +59,7 @@ fn run(config: &config::Config) -> Result<(), Box<dyn std::error::Error>> {
         }
 
         //  Sleep for 1/FPS seconds
-        std::thread::sleep(Duration::from_millis(1000 / config.fps));
+        std::thread::sleep(std::time::Duration::from_millis(1000 / config.fps));
     }
 
     // Cleanup the terminal after the application stops
@@ -67,6 +67,9 @@ fn run(config: &config::Config) -> Result<(), Box<dyn std::error::Error>> {
 
     Ok(())
 }
+
+// HELPER FUNCTIONS
+// ----------------
 
 /// Prepares the terminal by switching to the alternate screen and clearing it.
 /// Also moves the cursor to the top before hiding it from view.

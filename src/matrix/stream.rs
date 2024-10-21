@@ -12,18 +12,18 @@ use super::entity::Entity;
 
 // Represents a single stream in the Matrix
 pub struct Stream {
-    /// The collection of entities that make up the stream
+    /// The collection of [entities](Entity) that make up the stream
     pub entities: Vec<Entity>,
 
-    // X Position
+    /// X Position
     x: f32,
-    // Y Position
+    /// Y Position
     y: f32,
 
     /// Speed
     speed: f32,
 
-    /// Count of entities
+    /// Count of [entities](Entity) in the stream
     count: u16,
 }
 

@@ -1,3 +1,13 @@
+use std::{io::Write, time::Duration};
+
+use clap::Parser;
+use crossterm::{
+    cursor,
+    event::{KeyCode, KeyEvent, KeyEventKind, KeyModifiers},
+    style::{style, Stylize},
+    terminal, QueueableCommand,
+};
+
 mod ansi;
 mod config;
 mod entity;
@@ -6,39 +16,59 @@ mod stream;
 mod symbols;
 mod utils;
 
-use clap::Parser;
-use crossterm::{event, terminal};
-use std::time::Duration;
-
 //  ====
 //  MAIN
 //  ====
 
+/// The main entrypoint of the application
 fn main() {
     //  Parse command-line arguments as the configuration
     let config = config::Config::parse();
+    // Run the main logic with the given command-line arguments
+    match run(&config) {
+        Err(e) => {
+            eprintln!("{}", style(format!("Error: {e}")).red());
+            std::process::exit(1)
+        }
+        Ok(_) => std::process::exit(0),
+    }
+}
+
+/// Run the main logic of the application
+fn run(config: &config::Config) -> Result<(), Box<dyn std::error::Error>> {
+    // Get a reference to stdout
+    let mut stdout = std::io::stdout();
 
     //  Get Terminal Window Size to determine the number of rows and columns
-    let (columns, rows) = terminal::size().unwrap_or((40, 120));
+    let (columns, rows) = terminal::size()?;
 
     //  Instantiate streams
     let mut matrix = matrix::Matrix::new(rows, columns, &config);
 
-    // Switch to the alternate screen buffer
-    terminal::enable_raw_mode().unwrap();
+    // Setup the terminal before running the application
+    setup(&mut stdout)?;
 
     //  Render the Matrix-Rain on screen
-    ansi::clear_screen();
-    ansi::hide_cursor();
     loop {
         // Check if 'q' or Ctrl+C has been pressed
-        if event::poll(Duration::from_millis(0)).unwrap() {
-            if let event::Event::Key(event) = event::read().unwrap() {
-                if event.code == event::KeyCode::Char('q')
-                    || (event.modifiers == event::KeyModifiers::CONTROL
-                        && event.code == event::KeyCode::Char('c'))
-                {
-                    break;
+        if crossterm::event::poll(Duration::from_millis(100))? {
+            if let crossterm::event::Event::Key(event) = crossterm::event::read()? {
+                if event.kind == KeyEventKind::Press {
+                    match event {
+                        KeyEvent {
+                            code: KeyCode::Char('q'),
+                            ..
+                        }
+                        | KeyEvent {
+                            code: KeyCode::Esc, ..
+                        }
+                        | KeyEvent {
+                            code: KeyCode::Char('c'),
+                            modifiers: KeyModifiers::CONTROL,
+                            ..
+                        } => break,
+                        _ => {}
+                    }
                 }
             }
         }
@@ -50,9 +80,43 @@ fn main() {
         std::thread::sleep(Duration::from_millis(1000 / config.fps));
     }
 
-    //  Clear screen and disable raw mode before exiting
-    ansi::clear_screen();
-    ansi::cursor_move_to(0, 0);
-    ansi::show_cursor();
-    terminal::disable_raw_mode().unwrap();
+    // Cleanup the terminal after the application stops
+    cleanup(&mut stdout)?;
+
+    Ok(())
+}
+
+/// Prepares the terminal by switching to the alternate screen and clearing it.
+/// Also moves the cursor to the top before hiding it from view.
+/// Registers a panic-hook to automatically call the `cleanup` function
+fn setup(stdout: &mut std::io::Stdout) -> std::io::Result<()> {
+    terminal::enable_raw_mode()?;
+    stdout
+        .queue(terminal::EnterAlternateScreen)?
+        .queue(terminal::Clear(terminal::ClearType::All))?
+        .queue(cursor::MoveTo(0, 0))?
+        .queue(cursor::Hide)?
+        .flush()?;
+
+    // Create a custom hook to handle graceful cleanup of the terminal when panicking
+    let original_panic = std::panic::take_hook();
+    std::panic::set_hook(Box::new(move |info| {
+        let mut stdout = std::io::stdout();
+        // Intentionally ignore errors here since we're already in a panic!
+        let _ = cleanup(&mut stdout);
+        original_panic(info);
+    }));
+
+    Ok(())
+}
+
+/// Restores terminal to its original state by leaving alternate screen,
+/// showing the cursor, and disabling raw mode.
+fn cleanup(stdout: &mut std::io::Stdout) -> std::io::Result<()> {
+    stdout
+        .queue(terminal::LeaveAlternateScreen)?
+        .queue(cursor::Show)?
+        .flush()?;
+    terminal::disable_raw_mode()?;
+    Ok(())
 }

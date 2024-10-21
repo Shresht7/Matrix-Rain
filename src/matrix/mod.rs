@@ -1,3 +1,5 @@
+use std::io::Write;
+
 use super::{config, symbols, utils};
 
 mod entity;
@@ -49,9 +51,15 @@ impl Matrix {
     }
 
     /// Render the Matrix
-    pub fn render(&mut self, config: &config::Config) {
+    pub fn render(
+        &mut self,
+        config: &config::Config,
+        stdout: &mut std::io::Stdout,
+    ) -> std::io::Result<()> {
         for stream in self.streams.iter_mut() {
-            stream.render(self.rows as i32, config);
+            stream.render(self.rows as i32, config, stdout)?;
         }
+        stdout.flush()?;
+        Ok(())
     }
 }

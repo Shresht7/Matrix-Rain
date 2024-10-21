@@ -33,7 +33,7 @@ fn main() {
 }
 
 /// Run the main logic of the application
-fn run(config: &config::Config) -> Result<(), Box<dyn std::error::Error>> {
+fn run(config: &config::Config) -> std::io::Result<()> {
     // Get a reference to stdout
     let mut stdout = std::io::stdout();
 
@@ -49,7 +49,7 @@ fn run(config: &config::Config) -> Result<(), Box<dyn std::error::Error>> {
     //  Render the Matrix-Rain on screen
     loop {
         //  Render each stream
-        matrix.render(&config);
+        matrix.render(&config, &mut stdout)?;
 
         // Handle events
         if let events::Action::Exit = events::handle_events()? {

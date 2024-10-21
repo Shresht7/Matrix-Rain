@@ -1,3 +1,7 @@
+use crossterm::cursor;
+use crossterm::style::Print;
+use crossterm::QueueableCommand;
+
 use crate::ansi;
 use crate::config;
 use crate::utils;
@@ -54,20 +58,23 @@ impl Entity {
     }
 
     /// Render entity on screen
-    pub fn render(&mut self) {
+    pub fn render(&mut self, stdout: &mut std::io::Stdout) -> std::io::Result<()> {
         //  Don't render if y is above screen
         if self.y < 0.0 {
-            return;
+            return Ok(());
         }
 
         //  Move cursor to position and write symbol
-        ansi::cursor_move_to(self.y as u32, self.x as u32);
-        print!("{}", ansi::rgb(&self.symbol, self.color));
+        stdout
+            .queue(cursor::MoveTo(self.x as u16, self.y as u16))?
+            .queue(Print(format!("{}", ansi::rgb(&self.symbol, self.color))))?;
 
         //  Switch symbol if frame_count exceeds switch_interval
         if self.frame_count % self.switch_interval == 0 {
             self.set_symbol()
         }
         self.frame_count += 1;
+
+        Ok(())
     }
 }

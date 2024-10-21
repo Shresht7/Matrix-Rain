@@ -1,4 +1,7 @@
 use colorgrad::{self, Color};
+use crossterm::cursor;
+use crossterm::style::Print;
+use crossterm::QueueableCommand;
 
 use crate::ansi;
 use crate::config;
@@ -96,14 +99,20 @@ impl Stream {
     }
 
     /// Render the stream
-    pub fn render(&mut self, rows: i32, config: &config::Config) {
+    pub fn render(
+        &mut self,
+        rows: i32,
+        config: &config::Config,
+        stdout: &mut std::io::Stdout,
+    ) -> std::io::Result<()> {
         // Check the last entity of the stream ...
         if let Some(e) = self.entities.last() {
             // Clean up the last entity. As the stream moves down, all entities will be overwritten
             // by the next frame, except for the trailing entity. So we manually overwrite it so that
             // the stream doesn't leave a trail.
-            ansi::cursor_move_to(e.y as u32, e.x as u32);
-            print!(" ");
+            stdout
+                .queue(cursor::MoveTo(e.x as u16, e.y as u16))?
+                .queue(Print(" "))?;
 
             // This is also a good time to check if the last entity is off screen,
             // (i.e. the y position is greater than the number of rows)
@@ -116,7 +125,9 @@ impl Stream {
         // Move the stream down and render each entity
         for entity in self.entities.iter_mut() {
             entity.rain();
-            entity.render();
+            entity.render(stdout)?;
         }
+
+        Ok(())
     }
 }

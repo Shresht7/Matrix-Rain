@@ -39,7 +39,7 @@ impl Entity {
             symbol: ' ',
             mode: config.mode.clone(),
             frame_count: 0,
-            switch_interval: utils::random_between::<u16>(1, 60),
+            switch_interval: utils::random_number_between::<u16>(1, 60),
         };
     }
 

@@ -15,6 +15,8 @@ pub enum Symbols {
     Binary,
     /// ASCII Symbols: Printable characters from 33 to 126 (0x21 to 0x7E). (from '!' to '~', including A-Z, a-z, 0-9 etc.)
     ASCII,
+    /// Mathematical Symbols: Various mathematical characters like: ∐, ∑, ≠, →
+    Math,
     /// Braille Symbols: Unicode range from 0x2840 to 0x2840 + 63 (64 Braille patterns)
     Braille,
     /// Emoji (Cursed) Symbols: Unicode range from 0x1F300 to 0x1F3F0 (various emojis)
@@ -23,8 +25,6 @@ pub enum Symbols {
     Custom(String),
 }
 
-// TODO: Add support for mathematical symbols
-
 impl FromStr for Symbols {
     type Err = anyhow::Error;
     /// Parse a string to a Symbol Set
@@ -32,6 +32,7 @@ impl FromStr for Symbols {
         match s.to_lowercase().as_str() {
             "original" | "normal" | "katakana" => Ok(Self::Original),
             "binary" | "bin" => Ok(Self::Binary),
+            "maths" | "math" | "mathematics" => Ok(Self::Math),
             "ascii" | "text" | "english" => Ok(Self::ASCII),
             "braille" | "dots" => Ok(Self::Braille),
             "emoji" | "cursed" => Ok(Self::Cursed),
@@ -59,6 +60,19 @@ impl Symbols {
             // ASCII Symbols: Printable characters from 33 to 126 (0x21 to 0x7E). (from '!' to '~', including A-Z, a-z, 0-9 etc.)
             Self::ASCII => {
                 let r = utils::random_number_between(33, 127) as u32;
+                return std::char::from_u32(r).unwrap_or('0');
+            }
+
+            // Mathematical Symbols: Various mathematical characters like: ∐, ∑, ≠, →
+            Symbols::Math => {
+                // Choose a range randomly for different categories of mathematical symbols
+                let category = utils::random_number_between(0, 4);
+                let r = match category {
+                    0 => utils::random_number_between(0x2210, 0x221F) as u32, // Basic Mathematical Operators
+                    1 => utils::random_number_between(0x2260, 0x226F) as u32, // Relations
+                    2 => utils::random_number_between(0x2190, 0x21FF) as u32, // Arrows
+                    _ => utils::random_number_between(0x27C0, 0x27EF) as u32, // Miscellaneous Mathematical Symbols
+                };
                 return std::char::from_u32(r).unwrap_or('0');
             }
 

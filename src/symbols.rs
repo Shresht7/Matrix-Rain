@@ -30,12 +30,12 @@ impl FromStr for Symbols {
     /// Parse a string to a Symbol Set
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         match s.to_lowercase().as_str() {
-            "original" | "normal" | "katakana" => Ok(Symbols::Original),
-            "binary" | "bin" => Ok(Symbols::Binary),
-            "ascii" | "text" | "english" => Ok(Symbols::ASCII),
-            "braille" | "dots" => Ok(Symbols::Braille),
-            "emoji" | "cursed" => Ok(Symbols::Cursed),
-            x => Ok(Symbols::Custom(x.to_string())),
+            "original" | "normal" | "katakana" => Ok(Self::Original),
+            "binary" | "bin" => Ok(Self::Binary),
+            "ascii" | "text" | "english" => Ok(Self::ASCII),
+            "braille" | "dots" => Ok(Self::Braille),
+            "emoji" | "cursed" => Ok(Self::Cursed),
+            x => Ok(Self::Custom(x.to_string())),
         }
     }
 }
@@ -45,37 +45,37 @@ impl Symbols {
     pub fn get_random(&self) -> char {
         match self {
             // Katakana Symbols: Unicode range from 0x30A0 to 0x30A0 + 96 (96 Katakana characters)
-            Symbols::Original => {
+            Self::Original => {
                 let r = utils::random_number_between(0x30a0, 0x30a0 + 96) as u32;
                 return std::char::from_u32(r).unwrap_or('0');
             }
 
             // Binary Symbols: Only '0' and '1'
-            Symbols::Binary => {
+            Self::Binary => {
                 let r = utils::random_number_between(0, 2);
                 return if r == 0 { '0' } else { '1' };
             }
 
             // ASCII Symbols: Printable characters from 33 to 126 (0x21 to 0x7E). (from '!' to '~', including A-Z, a-z, 0-9 etc.)
-            Symbols::ASCII => {
+            Self::ASCII => {
                 let r = utils::random_number_between(33, 127) as u32;
                 return std::char::from_u32(r).unwrap_or('0');
             }
 
             // Braille Symbols: Unicode range from 0x2840 to 0x2840 + 63 (64 Braille patterns)
-            Symbols::Braille => {
+            Self::Braille => {
                 let r = utils::random_number_between(0x2840, 0x2840 + 63) as u32;
                 return std::char::from_u32(r).unwrap_or('0');
             }
 
             // Emoji (Cursed) Symbols: Unicode range from 0x1F300 to 0x1F3F0 (various emojis)
-            Symbols::Cursed => {
+            Self::Cursed => {
                 let r = utils::random_number_between(0x1f300, 0x1f3f0) as u32;
                 return std::char::from_u32(r).unwrap_or('0');
             }
 
             // Custom Symbols: User-defined symbol set
-            Symbols::Custom(s) => {
+            Self::Custom(s) => {
                 let r = utils::random_number_between(0, s.len());
                 return s.chars().nth(r).unwrap_or('0');
             }

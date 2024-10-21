@@ -50,31 +50,13 @@ fn run(config: &config::Config) -> Result<(), Box<dyn std::error::Error>> {
 
     //  Render the Matrix-Rain on screen
     loop {
-        // Check if 'q' or Ctrl+C has been pressed
-        if crossterm::event::poll(Duration::from_millis(100))? {
-            if let crossterm::event::Event::Key(event) = crossterm::event::read()? {
-                if event.kind == KeyEventKind::Press {
-                    match event {
-                        KeyEvent {
-                            code: KeyCode::Char('q'),
-                            ..
-                        }
-                        | KeyEvent {
-                            code: KeyCode::Esc, ..
-                        }
-                        | KeyEvent {
-                            code: KeyCode::Char('c'),
-                            modifiers: KeyModifiers::CONTROL,
-                            ..
-                        } => break,
-                        _ => {}
-                    }
-                }
-            }
-        }
-
         //  Render each stream
         matrix.render(&config);
+
+        // Handle events
+        if let Action::Exit = handle_events()? {
+            break;
+        }
 
         //  Sleep for 1/FPS seconds
         std::thread::sleep(Duration::from_millis(1000 / config.fps));
@@ -84,6 +66,47 @@ fn run(config: &config::Config) -> Result<(), Box<dyn std::error::Error>> {
     cleanup(&mut stdout)?;
 
     Ok(())
+}
+
+/// Instructs the main loop what to do
+enum Action {
+    /// Do nothing
+    None,
+    /// Exit the loop
+    Exit,
+}
+
+/// Processes and handles [crossterm events](crossterm::event). Returns an [`Action`] as a response.
+fn handle_events() -> std::io::Result<Action> {
+    if crossterm::event::poll(Duration::from_millis(100))? {
+        match crossterm::event::read()? {
+            crossterm::event::Event::Key(event) if event.kind == KeyEventKind::Press => {
+                return Ok(handle_key_event(event))
+            }
+            _ => (),
+        }
+    }
+    Ok(Action::None)
+}
+
+/// Handles keyboard events and returns an [`Action`] based on the key pressed.
+fn handle_key_event(event: KeyEvent) -> Action {
+    match event {
+        // Check if 'q', `Esc` or `Ctrl+C` has been pressed ...
+        KeyEvent {
+            code: KeyCode::Char('q'),
+            ..
+        }
+        | KeyEvent {
+            code: KeyCode::Esc, ..
+        }
+        | KeyEvent {
+            code: KeyCode::Char('c'),
+            modifiers: KeyModifiers::CONTROL,
+            ..
+        } => Action::Exit, // ... then respond with exit.
+        _ => Action::None, // ... otherwise, respond with none.
+    }
 }
 
 /// Prepares the terminal by switching to the alternate screen and clearing it.

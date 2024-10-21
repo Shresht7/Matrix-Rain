@@ -1,7 +1,12 @@
 [package]
 name = "matrix-rain"
-authors = ["Shresht7"]
 version = "0.1.0"
+description = "The matrix-rain effect in the terminal"
+authors = ["Shresht7"]
+repository = "https://github.com/Shresht7/matrix-rain"
+license = "MIT"
+keywords = ["cli", "command-line-utilities", "matrix-rain"]
+categories = ["command-line-utilities"]
 edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html

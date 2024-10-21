@@ -50,10 +50,10 @@ impl Stream {
         self.entities.clear();
 
         // Randomize the speed
-        self.speed = utils::random_number_between(0.125, 1.0);
+        self.speed = utils::random_between(0.125, 1.0);
 
         // Randomize the count
-        self.count = utils::random_number_between(config.stream_min_count, config.stream_max_count);
+        self.count = utils::random_between(config.stream_min_count, config.stream_max_count);
 
         // Create the leading entity
         self.entities.push(Entity::new(

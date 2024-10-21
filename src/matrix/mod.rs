@@ -39,7 +39,7 @@ impl Matrix {
                 continue;
             }
             //  Generate the stream
-            let height_offset = utils::random_number_between(-50, 0);
+            let height_offset = utils::random_between(-50, 0);
             let stream = Stream::new(c as f32, height_offset as f32, config);
 
             //  Add stream to vector collection

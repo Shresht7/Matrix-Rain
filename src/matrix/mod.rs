@@ -11,11 +11,12 @@ use stream::Stream;
 
 /// The structure that represents the Matrix
 pub struct Matrix {
-    // Number of rows
+    /// Number of rows
     rows: u16,
-    // Number of columns
+    /// Number of columns
     columns: u16,
-    // Collection of streams
+
+    /// Collection of matrix [entity](entity::Entity) streams
     streams: Vec<Stream>,
 }
 

@@ -52,12 +52,11 @@ fn run(config: &config::Config) -> std::io::Result<()> {
         matrix.render(&config, &mut stdout)?;
 
         // Handle events
-        if let events::Action::Exit = events::handle_events()? {
-            break;
+        if crossterm::event::poll(std::time::Duration::from_millis(1000 / config.fps))? {
+            if let events::Action::Exit = events::handle_events()? {
+                break;
+            }
         }
-
-        //  Sleep for 1/FPS seconds
-        std::thread::sleep(std::time::Duration::from_millis(1000 / config.fps));
     }
 
     // Cleanup the terminal after the application stops

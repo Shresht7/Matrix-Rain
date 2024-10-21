@@ -10,13 +10,11 @@ pub enum Action {
 
 /// Processes and handles [crossterm events](crossterm::event). Returns an [`Action`] as a response.
 pub fn handle_events() -> std::io::Result<Action> {
-    if crossterm::event::poll(std::time::Duration::from_millis(100))? {
-        match crossterm::event::read()? {
-            crossterm::event::Event::Key(event) if event.kind == KeyEventKind::Press => {
-                return Ok(handle_key_event(event))
-            }
-            _ => (),
+    match crossterm::event::read()? {
+        crossterm::event::Event::Key(event) if event.kind == KeyEventKind::Press => {
+            return Ok(handle_key_event(event))
         }
+        _ => (),
     }
     Ok(Action::None)
 }

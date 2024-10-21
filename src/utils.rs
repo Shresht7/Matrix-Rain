@@ -1,4 +1,3 @@
-//  Library
 use rand::Rng;
 
 //  =========
@@ -6,7 +5,7 @@ use rand::Rng;
 //  =========
 
 /// Generate a random number between min and max
-pub fn random_between<T: PartialOrd + rand::distributions::uniform::SampleUniform>(
+pub fn random_number_between<T: PartialOrd + rand::distributions::uniform::SampleUniform>(
     min: T,
     max: T,
 ) -> T {
@@ -18,7 +17,7 @@ mod tests {
 
     #[test]
     fn no_random_number_between_0_and_1() {
-        assert_eq!(super::random_between(0, 1), 0);
+        assert_eq!(super::random_number_between(0, 1), 0);
     }
 
     #[test]
@@ -26,7 +25,7 @@ mod tests {
         let min = -15;
         let max = 45;
         for _ in 0..100 {
-            let x = super::random_between(min, max);
+            let x = super::random_number_between(min, max);
             if x < min || x >= max {
                 panic!("Random number not between specified range")
             }
@@ -41,14 +40,14 @@ mod tests {
 
     #[test]
     fn random_i32s_return_i32() {
-        let number = super::random_between(-15, 32);
+        let number = super::random_number_between(-15, 32);
         let type_of_number = type_of(&number);
         assert_eq!(type_of_number, "i32");
     }
 
     #[test]
     fn random_u16s_return_u16() {
-        let number = super::random_between::<u16>(0, 120);
+        let number = super::random_number_between::<u16>(0, 120);
         let type_of_number = type_of(&number);
         assert_eq!(type_of_number, "u16");
     }

@@ -41,37 +41,37 @@ impl Symbols {
         match self {
             //  Katakana Symbols
             Symbols::Original => {
-                let r = utils::random_between(0x30a0, 0x30a0 + 96) as u32;
+                let r = utils::random_number_between(0x30a0, 0x30a0 + 96) as u32;
                 return std::char::from_u32(r).unwrap_or('0');
             }
 
             //  Binary Symbols
             Symbols::Binary => {
-                let r = utils::random_between(0, 2);
+                let r = utils::random_number_between(0, 2);
                 return if r == 0 { '0' } else { '1' };
             }
 
             //  ASCII Symbols
             Symbols::ASCII => {
-                let r = utils::random_between(33, 127) as u32;
+                let r = utils::random_number_between(33, 127) as u32;
                 return std::char::from_u32(r).unwrap_or('0');
             }
 
             //  Braille Symbols
             Symbols::Braille => {
-                let r = utils::random_between(0x2840, 0x2840 + 63) as u32;
+                let r = utils::random_number_between(0x2840, 0x2840 + 63) as u32;
                 return std::char::from_u32(r).unwrap_or('0');
             }
 
             //  (Cursed) Emoji Symbols
             Symbols::Cursed => {
-                let r = utils::random_between(0x1f300, 0x1f3f0) as u32;
+                let r = utils::random_number_between(0x1f300, 0x1f3f0) as u32;
                 return std::char::from_u32(r).unwrap_or('0');
             }
 
             //  Custom Symbols
             Symbols::Custom(s) => {
-                let r = utils::random_between(0, s.len());
+                let r = utils::random_number_between(0, s.len());
                 return s.chars().nth(r).unwrap_or('0');
             }
         }

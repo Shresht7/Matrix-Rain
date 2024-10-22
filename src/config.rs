@@ -38,10 +38,10 @@ pub struct Config {
     #[clap(long, default_value = "2")]
     pub stream_spacing: u16,
 
-    /// The max number-of-frames within which an entity randomly switches it's symbol.
+    /// The max number-of-seconds within which an entity randomly switches it's symbol.
     ///
     /// This adds a bit of randomness to each stream, as the entities can switch their
     /// symbol as they rain down the screen.
-    #[clap(long, default_value = "60")]
+    #[clap(long, default_value = "1")]
     pub switch_interval: u16,
 }

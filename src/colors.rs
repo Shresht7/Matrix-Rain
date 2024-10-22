@@ -1,11 +1,11 @@
 use std::str::FromStr;
 
 // ---------
-// RGB COLOR
+// RGBColor COLOR
 // ---------
 
-/// Holds the RGB values for a color
-#[derive(Clone, Copy, Debug)]
+/// Holds the RGBColor values for a color
+#[derive(Clone, Copy, Debug, PartialEq)]
 pub struct RGBColor(pub u8, pub u8, pub u8);
 
 impl RGBColor {
@@ -93,7 +93,7 @@ impl RGBColor {
     }
 }
 
-/// Color string with ANSI RGB color code
+/// Color string with ANSI RGBColor color code
 pub fn rgb(s: &char, color: RGBColor) -> String {
     format!(
         "\u{001b}[38;2;{};{};{}m{}\u{001b}[0m",
@@ -172,7 +172,7 @@ impl LinearGradient {
 // ------
 
 /// Errors that can occur when trying to parse [RGBColor]
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Eq)]
 pub enum ParseErrorKind {
     /// The provided format was invalid
     InvalidFormat(String),
@@ -193,3 +193,104 @@ impl std::fmt::Display for ParseErrorKind {
 }
 
 impl std::error::Error for ParseErrorKind {}
+
+// -----
+// TESTS
+// -----
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn should_return_the_correct_rgb_values() {
+        let color = RGBColor(127, 102, 255);
+        assert_eq!(color.r(), 127);
+        assert_eq!(color.g(), 102);
+        assert_eq!(color.b(), 255);
+    }
+
+    #[test]
+    fn should_return_the_correct_ansi_code() {
+        let color = RGBColor(127, 102, 255);
+        assert_eq!(color.ansi(), "\x1b[38;2;127;102;255m");
+        assert_eq!(color.ansi_bg(), "\x1b[48;2;127;102;255m");
+    }
+
+    #[test]
+    fn should_parse_a_tuple_of_u8s() {
+        let color = RGBColor::from((127, 102, 255));
+        assert_eq!(color.r(), 127);
+        assert_eq!(color.g(), 102);
+        assert_eq!(color.b(), 255);
+    }
+
+    #[test]
+    fn should_parse_rgb_from_hex_str() {
+        assert_eq!(RGBColor::from_hex_str("#000000"), Ok(RGBColor(0, 0, 0)));
+        assert_eq!(
+            RGBColor::from_hex_str("#FFFFFF"),
+            Ok(RGBColor(255, 255, 255))
+        );
+        assert_eq!(RGBColor::from_hex_str("#FF0000"), Ok(RGBColor(255, 0, 0)));
+        assert_eq!(RGBColor::from_hex_str("#00FF00"), Ok(RGBColor(0, 255, 0)));
+        assert_eq!(RGBColor::from_hex_str("#0000FF"), Ok(RGBColor(0, 0, 255)));
+        assert!(
+            RGBColor::from_hex_str("#GGGGGG").is_err_and(|x| match x {
+                ParseErrorKind::InvalidHexValue(_) => true,
+                _ => false,
+            }),
+            "Invalid Hex Format"
+        )
+    }
+
+    #[test]
+    fn should_parse_rgb_from_rgb_str() {
+        assert_eq!(RGBColor::from_rgb_str("0,0,0"), Ok(RGBColor(0, 0, 0)));
+        assert_eq!(
+            RGBColor::from_rgb_str("255,255,255"),
+            Ok(RGBColor(255, 255, 255))
+        );
+        assert_eq!(RGBColor::from_rgb_str("255,0,0"), Ok(RGBColor(255, 0, 0)));
+        assert_eq!(RGBColor::from_rgb_str("0,255,0"), Ok(RGBColor(0, 255, 0)));
+        assert_eq!(RGBColor::from_rgb_str("0,0,255"), Ok(RGBColor(0, 0, 255)));
+        assert_eq!(
+            RGBColor::from_rgb_str("124, 64, 39"),
+            Ok(RGBColor(124, 64, 39))
+        );
+        assert_eq!(
+            RGBColor::from_str("255,255"),
+            Err(ParseErrorKind::InvalidFormat("255,255".into()))
+        );
+        assert_eq!(
+            RGBColor::from_str("255,GGG,0"),
+            Err(ParseErrorKind::InvalidFormat("255,GGG,0".into()))
+        );
+    }
+
+    #[test]
+    fn should_parse_rgb_from_named_colors() {
+        assert_eq!(RGBColor::from_named_color("black"), Ok(RGBColor(0, 0, 0)));
+        assert_eq!(RGBColor::from_named_color("red"), Ok(RGBColor(255, 0, 0)));
+        assert_eq!(
+            RGBColor::from_named_color("magenta"),
+            Ok(RGBColor(255, 0, 255))
+        );
+        assert_eq!(
+            RGBColor::from_named_color("white"),
+            Ok(RGBColor(255, 255, 255))
+        );
+        assert_eq!(
+            RGBColor::from_named_color("unknown"),
+            Err(ParseErrorKind::UnsupportedName("unknown".into()))
+        );
+    }
+
+    #[test]
+    fn should_wrap_in_rgb_ansi_code() {
+        let color = RGBColor(127, 102, 167);
+        let str = '#';
+        let ansi_str = "\x1b[38;2;127;102;167m#\x1b[0m";
+        assert_eq!(rgb(&str, color), ansi_str);
+    }
+}

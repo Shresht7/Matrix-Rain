@@ -1,6 +1,6 @@
 [package]
 name = "matrix-rain"
-version = "0.1.0"
+version = "0.2.0"
 description = "The matrix-rain effect in the terminal"
 authors = ["Shresht7"]
 repository = "https://github.com/Shresht7/matrix-rain"

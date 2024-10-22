@@ -52,7 +52,7 @@ fn run(config: &config::Config) -> std::io::Result<()> {
         matrix.render(&config, &mut stdout)?;
 
         // Handle events
-        if crossterm::event::poll(std::time::Duration::from_millis(1000 / config.fps))? {
+        if crossterm::event::poll(std::time::Duration::from_millis(1000 / config.fps as u64))? {
             if let events::Action::Exit = events::handle_events()? {
                 break;
             }

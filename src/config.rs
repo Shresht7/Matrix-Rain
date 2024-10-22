@@ -22,9 +22,9 @@ pub struct Config {
     #[clap(long, default_value = "200,255,200")]
     pub leading_entity_color: ansi::RGBColor,
 
-    /// Frame-Rate
+    /// The Frame-Rate to run at. The screen will rerender this many times each second.
     #[clap(long, default_value = "60")]
-    pub fps: u64,
+    pub fps: u16,
 
     /// Minimum number of entities per stream
     #[clap(long, default_value = "5")]

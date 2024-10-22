@@ -52,12 +52,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "anyhow"
-version = "1.0.90"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "37bf3594c4c988a53154954629820791dde498571819ae4ca50ca811e060cc95"
-
-[[package]]
 name = "autocfg"
 version = "1.4.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -207,7 +201,6 @@ checksum = "a7a70ba024b9dc04c27ea2f0c0548feb474ec5c54bba33a7f72f873a39d07b24"
 name = "matrix-rain"
 version = "0.1.0"
 dependencies = [
- "anyhow",
  "clap",
  "crossterm",
  "rand",

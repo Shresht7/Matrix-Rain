@@ -66,7 +66,7 @@ impl Stream {
         // Create the color gradient for the stream
         let gradient = colors::LinearGradient::new(
             colors::RGBColor::from(config.stream_color),
-            colors::RGBColor::from(config.stream_color) * 0.33, // Overloaded Operator for Scalar Multiplication
+            colors::RGBColor::from(config.stream_color) * config.stream_color_gradient_factor, // Overloaded Operator for Scalar Multiplication
         );
 
         // Create the following entities

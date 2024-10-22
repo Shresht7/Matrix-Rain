@@ -18,6 +18,10 @@ pub struct Config {
     #[clap(long, default_value = "0,255,70")]
     pub stream_color: colors::RGBColor,
 
+    /// The multiplier that describes the extent of the gradient in the stream color
+    #[clap(long, default_value_t = 0.33)]
+    pub stream_color_gradient_factor: f32,
+
     /// Color of the leading entity in a stream
     #[clap(long, default_value = "200,255,200")]
     pub leading_entity_color: colors::RGBColor,

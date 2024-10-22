@@ -1,4 +1,3 @@
-use colorgrad::{self, Color};
 use crossterm::cursor;
 use crossterm::style::Print;
 use crossterm::QueueableCommand;
@@ -65,31 +64,15 @@ impl Stream {
         ));
 
         // Create the color gradient for the stream
-        let gradient = colorgrad::CustomGradient::new()
-            .colors(&[
-                Color::from_rgba8(
-                    config.stream_color.0,
-                    config.stream_color.1,
-                    config.stream_color.2,
-                    255,
-                ),
-                Color::from_rgba8(
-                    (config.stream_color.0 as f32 * 0.33).floor() as u8,
-                    (config.stream_color.1 as f32 * 0.33).floor() as u8,
-                    (config.stream_color.2 as f32 * 0.33).floor() as u8,
-                    255,
-                ),
-            ])
-            .build()
-            .unwrap();
+        let gradient = colors::LinearGradient::new(
+            colors::RGBColor::from(config.stream_color),
+            colors::RGBColor::from(config.stream_color) * 0.33, // Overloaded Operator for Scalar Multiplication
+        );
 
         // Create the following entities
         for i in 1..self.count {
             // Determine the color of the entity based on the gradient
-            let color = {
-                let [r, g, b, _] = gradient.at(i as f64 / self.count as f64).to_rgba8();
-                colors::RGBColor(r, g, b)
-            };
+            let color = gradient.interpolate(i as f32 / self.count as f32);
 
             // Create the entity and add it to the entities vector
             let mut e = Entity::new(self.x, self.y - i as f32, self.speed, color, config);

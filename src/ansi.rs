@@ -8,6 +8,21 @@ use std::str::FromStr;
 #[derive(Clone, Copy, Debug)]
 pub struct RGBColor(pub u8, pub u8, pub u8);
 
+impl RGBColor {
+    /// Returns the red value of the [RGBColor]
+    pub fn r(&self) -> u8 {
+        self.0
+    }
+    /// Returns the green value of the [RGBColor]
+    pub fn g(&self) -> u8 {
+        self.1
+    }
+    /// Returns the blue value of the [RGBColor]
+    pub fn b(&self) -> u8 {
+        self.0
+    }
+}
+
 /// Parse a [RGBColor] from a tuple of (u8, u8, u8)
 impl From<(u8, u8, u8)> for RGBColor {
     fn from(value: (u8, u8, u8)) -> Self {

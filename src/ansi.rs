@@ -21,6 +21,14 @@ impl RGBColor {
     pub fn b(&self) -> u8 {
         self.0
     }
+    /// Returns the ANSI escape code for the [RGBColor]
+    pub fn ansi(&self) -> String {
+        format!("\x1b[38;2;{};{};{}m", self.0, self.1, self.2)
+    }
+    /// Returns the ANSI escape code for the background [RGBColor]
+    pub fn ansi_bg(&self) -> String {
+        format!("\x1b[48;2;{};{};{}m", self.0, self.1, self.2)
+    }
 }
 
 /// Parse a [RGBColor] from a tuple of (u8, u8, u8)

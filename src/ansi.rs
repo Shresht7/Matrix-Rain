@@ -4,7 +4,7 @@ use std::str::FromStr;
 // RGB COLOR
 // ---------
 
-/// ANSI RGB Color Tuple Struct (Red, Green, Blue)
+/// Holds the RGB values for a color
 #[derive(Clone, Copy, Debug)]
 pub struct RGBColor(pub u8, pub u8, pub u8);
 
@@ -17,9 +17,9 @@ impl FromStr for RGBColor {
 
         if parts.len() == 1 {
             if parts[0].starts_with('#') {
-                return parse_hex_color(parts[0]);
+                return RGBColor::from_hex_str(parts[0]);
             } else {
-                return parse_named_color(parts[0]);
+                return RGBColor::from_named_color(parts[0]);
             }
         }
 
@@ -35,6 +35,32 @@ impl FromStr for RGBColor {
     }
 }
 
+impl RGBColor {
+    /// Parses a hex-color into a [RGBColor] value
+    fn from_hex_str(s: &str) -> Result<Self, ParseErrorKind> {
+        let color = s.trim_start_matches('#');
+        let r = u8::from_str_radix(&color[0..2], 16).map_err(ParseErrorKind::InvalidHexValue)?;
+        let g = u8::from_str_radix(&color[2..4], 16).map_err(ParseErrorKind::InvalidHexValue)?;
+        let b = u8::from_str_radix(&color[4..6], 16).map_err(ParseErrorKind::InvalidHexValue)?;
+        Ok(Self(r, g, b))
+    }
+
+    /// Parses a named-color into a [RGBColor] value
+    fn from_named_color(s: &str) -> Result<Self, ParseErrorKind> {
+        match s.to_lowercase().as_str() {
+            "black" => Ok(RGBColor(0, 0, 0)),
+            "red" => Ok(RGBColor(255, 0, 0)),
+            "green" => Ok(RGBColor(0, 255, 0)),
+            "yellow" => Ok(RGBColor(255, 255, 0)),
+            "blue" => Ok(RGBColor(0, 0, 255)),
+            "magenta" => Ok(RGBColor(255, 0, 255)),
+            "cyan" => Ok(RGBColor(0, 255, 255)),
+            "white" => Ok(RGBColor(255, 255, 255)),
+            name => Err(ParseErrorKind::UnsupportedName(name.to_string())),
+        }
+    }
+}
+
 /// Color string with ANSI RGB color code
 pub fn rgb(s: &char, color: RGBColor) -> String {
     format!(
@@ -46,32 +72,6 @@ pub fn rgb(s: &char, color: RGBColor) -> String {
     )
 }
 
-// HELPER FUNCTIONS
-// ----------------
-
-/// Parses a hex-color (#rrggbb format) into a [RGBColor] value
-pub fn parse_hex_color(color: &str) -> Result<RGBColor, ParseErrorKind> {
-    let color = color.trim_start_matches('#');
-    let r = u8::from_str_radix(&color[0..2], 16).map_err(ParseErrorKind::InvalidHexValue)?;
-    let g = u8::from_str_radix(&color[2..4], 16).map_err(ParseErrorKind::InvalidHexValue)?;
-    let b = u8::from_str_radix(&color[4..6], 16).map_err(ParseErrorKind::InvalidHexValue)?;
-    Ok(RGBColor(r, g, b))
-}
-
-/// Parses a named-color into a [RGBColor] value
-pub fn parse_named_color(color: &str) -> Result<RGBColor, ParseErrorKind> {
-    match color.to_lowercase().as_str() {
-        "black" => Ok(RGBColor(0, 0, 0)),
-        "red" => Ok(RGBColor(255, 0, 0)),
-        "green" => Ok(RGBColor(0, 255, 0)),
-        "yellow" => Ok(RGBColor(255, 255, 0)),
-        "blue" => Ok(RGBColor(0, 0, 255)),
-        "magenta" => Ok(RGBColor(255, 0, 255)),
-        "cyan" => Ok(RGBColor(0, 255, 255)),
-        "white" => Ok(RGBColor(255, 255, 255)),
-        name => Err(ParseErrorKind::UnsupportedName(name.to_string())),
-    }
-}
 // ------
 // ERRORS
 // ------

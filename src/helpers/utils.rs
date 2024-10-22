@@ -1,6 +1,6 @@
 use rand::Rng;
 
-use crate::colors;
+use super::colors;
 
 //  =========
 //  UTILITIES

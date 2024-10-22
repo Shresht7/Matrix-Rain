@@ -1,6 +1,6 @@
 use clap::Parser;
 
-use crate::colors;
+use crate::helpers::colors;
 use crate::symbols;
 
 //  =============

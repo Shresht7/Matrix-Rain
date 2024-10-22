@@ -7,12 +7,11 @@ use crossterm::{
     terminal, QueueableCommand,
 };
 
-mod colors;
 mod config;
 mod events;
+mod helpers;
 mod matrix;
 mod symbols;
-mod utils;
 
 //  ====
 //  MAIN

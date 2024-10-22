@@ -2,9 +2,8 @@ use crossterm::cursor;
 use crossterm::style::Print;
 use crossterm::QueueableCommand;
 
-use crate::colors;
 use crate::config;
-use crate::utils;
+use crate::helpers::{colors, utils};
 
 use super::entity::Entity;
 

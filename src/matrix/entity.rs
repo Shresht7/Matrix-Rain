@@ -2,7 +2,7 @@ use crossterm::cursor;
 use crossterm::style::Print;
 use crossterm::QueueableCommand;
 
-use crate::ansi;
+use crate::colors;
 use crate::config;
 use crate::utils;
 
@@ -27,7 +27,7 @@ pub struct Entity {
     /// The symbol the entity represents
     symbol: char,
     /// The color of the symbol
-    color: ansi::RGBColor,
+    color: colors::RGBColor,
     /// The character set to use for the symbols
     mode: symbols::Symbols,
     /// The frame-count since last symbol switch.
@@ -42,7 +42,13 @@ pub struct Entity {
 
 impl Entity {
     /// Constructs a new matrix [Entity]
-    pub fn new(x: f32, y: f32, speed: f32, color: ansi::RGBColor, config: &config::Config) -> Self {
+    pub fn new(
+        x: f32,
+        y: f32,
+        speed: f32,
+        color: colors::RGBColor,
+        config: &config::Config,
+    ) -> Self {
         Self {
             x,
             y,
@@ -86,7 +92,7 @@ impl Entity {
         // Move cursor to position and write symbol
         stdout
             .queue(cursor::MoveTo(self.x as u16, self.y as u16))?
-            .queue(Print(ansi::rgb(&self.symbol, self.color)))?;
+            .queue(Print(colors::rgb(&self.symbol, self.color)))?;
 
         // Switch symbol if `frame_count` exceeds `switch_interval`
         if self.switch_interval != 0 {

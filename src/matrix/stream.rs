@@ -3,7 +3,7 @@ use crossterm::cursor;
 use crossterm::style::Print;
 use crossterm::QueueableCommand;
 
-use crate::ansi;
+use crate::colors;
 use crate::config;
 use crate::utils;
 
@@ -88,7 +88,7 @@ impl Stream {
             // Determine the color of the entity based on the gradient
             let color = {
                 let [r, g, b, _] = gradient.at(i as f64 / self.count as f64).to_rgba8();
-                ansi::RGBColor(r, g, b)
+                colors::RGBColor(r, g, b)
             };
 
             // Create the entity and add it to the entities vector

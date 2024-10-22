@@ -1,6 +1,6 @@
 use clap::Parser;
 
-use crate::ansi;
+use crate::colors;
 use crate::symbols;
 
 //  =============
@@ -16,11 +16,11 @@ pub struct Config {
 
     /// Default color of the streaming entities
     #[clap(long, default_value = "0,255,70")]
-    pub stream_color: ansi::RGBColor,
+    pub stream_color: colors::RGBColor,
 
     /// Color of the leading entity in a stream
     #[clap(long, default_value = "200,255,200")]
-    pub leading_entity_color: ansi::RGBColor,
+    pub leading_entity_color: colors::RGBColor,
 
     /// The Frame-Rate to run at. The screen will rerender this many times each second.
     #[clap(long, default_value = "60")]

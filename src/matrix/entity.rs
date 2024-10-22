@@ -56,15 +56,24 @@ impl Entity {
         }
     }
 
+    /// Rain. Updates the position of the [Entity] using the rain speed.
+    pub fn rain(&mut self) {
+        self.x += self.speed_x;
+        self.y += self.speed_y;
+    }
+
     /// Updates the [Entity] symbol by picking one randomly from the symbol set
     pub fn set_symbol(&mut self) {
         self.symbol = self.mode.get_random();
     }
 
-    /// Rain. Updates the position of the [Entity] using the rain speed.
-    pub fn rain(&mut self) {
-        self.x += self.speed_x;
-        self.y += self.speed_y;
+    /// If the `frame_count` has exceeded `switch_interval` switch the [Entity] symbol to
+    /// another one from the character set.
+    fn switch_symbol(&mut self) {
+        if self.frame_count % self.switch_interval == 0 {
+            self.set_symbol();
+        }
+        self.frame_count += 1;
     }
 
     /// Render Entity on screen
@@ -79,11 +88,10 @@ impl Entity {
             .queue(cursor::MoveTo(self.x as u16, self.y as u16))?
             .queue(Print(ansi::rgb(&self.symbol, self.color)))?;
 
-        // Switch symbol if frame_count exceeds switch_interval
-        if self.frame_count % self.switch_interval == 0 {
-            self.set_symbol();
+        // Switch symbol if `frame_count` exceeds `switch_interval`
+        if self.switch_interval != 0 {
+            self.switch_symbol();
         }
-        self.frame_count += 1;
 
         Ok(())
     }

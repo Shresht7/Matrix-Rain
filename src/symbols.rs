@@ -1,4 +1,4 @@
-use std::str::FromStr;
+use std::{fmt::write, str::FromStr};
 
 use crate::utils;
 
@@ -26,7 +26,7 @@ pub enum Symbols {
 }
 
 impl FromStr for Symbols {
-    type Err = anyhow::Error;
+    type Err = ParseError;
     /// Parse a string to a Symbol Set
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         match s.to_lowercase().as_str() {
@@ -96,3 +96,18 @@ impl Symbols {
         }
     }
 }
+
+// ------
+// ERRORS
+// ------
+
+#[derive(Debug)]
+pub struct ParseError {}
+
+impl std::fmt::Display for ParseError {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "Failed to parse symbol set")
+    }
+}
+
+impl std::error::Error for ParseError {}

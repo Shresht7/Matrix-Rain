@@ -19,8 +19,10 @@ pub struct Entity {
     pub x: f32,
     /// The y-position
     pub y: f32,
-    /// Rain-fall speed
-    speed: f32,
+    /// The speed along the x-axis
+    speed_x: f32,
+    /// The speed along the y-axis
+    speed_y: f32,
 
     /// The symbol the entity represents
     symbol: char,
@@ -44,7 +46,8 @@ impl Entity {
         Self {
             x,
             y,
-            speed,
+            speed_x: 0.0,
+            speed_y: speed,
             color,
             symbol: ' ',
             mode: config.mode.clone(),
@@ -60,7 +63,8 @@ impl Entity {
 
     /// Rain. Updates the position of the [Entity] using the rain speed.
     pub fn rain(&mut self) {
-        self.y += self.speed;
+        self.x += self.speed_x;
+        self.y += self.speed_y;
     }
 
     /// Render Entity on screen

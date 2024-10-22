@@ -92,7 +92,7 @@ impl Entity {
         // Move cursor to position and write symbol
         stdout
             .queue(cursor::MoveTo(self.x as u16, self.y as u16))?
-            .queue(Print(colors::rgb(&self.symbol, self.color)))?;
+            .queue(Print(utils::ansi_rgb(&self.symbol, self.color)))?;
 
         // Switch symbol if `frame_count` exceeds `switch_interval`
         if self.switch_interval != 0 {

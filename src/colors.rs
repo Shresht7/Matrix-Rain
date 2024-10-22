@@ -105,17 +105,6 @@ impl std::ops::Mul<f32> for RGBColor {
     }
 }
 
-/// Color string with ANSI RGBColor color code
-pub fn rgb(s: &char, color: RGBColor) -> String {
-    format!(
-        "\u{001b}[38;2;{};{};{}m{}\u{001b}[0m",
-        color.0,
-        color.1,
-        color.2,
-        s.to_string()
-    )
-}
-
 // ---------
 // GRADIENTS
 // ---------
@@ -296,14 +285,6 @@ mod tests {
             RGBColor::from_named_color("unknown"),
             Err(ParseErrorKind::UnsupportedName("unknown".into()))
         );
-    }
-
-    #[test]
-    fn should_wrap_in_rgb_ansi_code() {
-        let color = RGBColor(127, 102, 167);
-        let str = '#';
-        let ansi_str = "\x1b[38;2;127;102;167m#\x1b[0m";
-        assert_eq!(rgb(&str, color), ansi_str);
     }
 
     #[test]

@@ -1,9 +1,21 @@
-//  Library
 use rand::Rng;
+
+use crate::colors;
 
 //  =========
 //  UTILITIES
 //  =========
+
+/// Color string with ANSI RGBColor color code
+pub fn ansi_rgb(s: &char, color: colors::RGBColor) -> String {
+    format!(
+        "\u{001b}[38;2;{};{};{}m{}\u{001b}[0m",
+        color.r(),
+        color.g(),
+        color.b(),
+        s.to_string()
+    )
+}
 
 /// Generates a random number between `min` and `max`.
 ///
@@ -25,6 +37,14 @@ pub fn random_between<T: PartialOrd + rand::distributions::uniform::SampleUnifor
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn should_wrap_in_rgb_ansi_code() {
+        let color = colors::RGBColor(127, 102, 167);
+        let str = '#';
+        let ansi_str = "\x1b[38;2;127;102;167m#\x1b[0m";
+        assert_eq!(ansi_rgb(&str, color), ansi_str);
+    }
 
     #[test]
     fn no_random_number_between_0_and_1() {

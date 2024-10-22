@@ -1,4 +1,4 @@
-use std::{slice::Iter, str::FromStr};
+use std::str::FromStr;
 
 // ---------
 // RGB COLOR
@@ -114,6 +114,26 @@ pub struct LinearGradient {
     delta: (i16, i16, i16),
 }
 
+struct LinearGradientSteps<'a> {
+    gradient: &'a LinearGradient,
+    current: usize,
+    count: usize,
+}
+
+impl<'a> Iterator for LinearGradientSteps<'a> {
+    type Item = RGBColor;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        if self.current < self.count {
+            let factor = self.current as f32 / (self.count - 1) as f32;
+            self.current += 1;
+            Some(self.gradient.interpolate(factor))
+        } else {
+            None
+        }
+    }
+}
+
 impl LinearGradient {
     /// Instantiate a new linear gradient
     pub fn new(start: RGBColor, end: RGBColor) -> Self {
@@ -135,6 +155,15 @@ impl LinearGradient {
         let g = self.start.g() as f32 + factor * self.delta.1 as f32;
         let b = self.start.b() as f32 + factor * self.delta.2 as f32;
         RGBColor(r.round() as u8, g.round() as u8, b.round() as u8)
+    }
+
+    /// Returns an iterator over each color stop
+    pub fn steps(&self, count: usize) -> LinearGradientSteps {
+        LinearGradientSteps {
+            gradient: self,
+            current: 0,
+            count,
+        }
     }
 }
 

@@ -1,7 +1,7 @@
 use std::str::FromStr;
 
 // ---------
-// RGBColor COLOR
+// RGB COLOR
 // ---------
 
 /// Holds the RGBColor values for a color
@@ -20,14 +20,6 @@ impl RGBColor {
     /// Returns the blue value of the [RGBColor]
     pub fn b(&self) -> u8 {
         self.2
-    }
-    /// Returns the ANSI escape code for the [RGBColor]
-    pub fn ansi(&self) -> String {
-        format!("\x1b[38;2;{};{};{}m", self.0, self.1, self.2)
-    }
-    /// Returns the ANSI escape code for the background [RGBColor]
-    pub fn ansi_bg(&self) -> String {
-        format!("\x1b[48;2;{};{};{}m", self.0, self.1, self.2)
     }
 }
 
@@ -115,7 +107,7 @@ pub struct LinearGradient {
     delta: (i16, i16, i16),
 }
 
-struct LinearGradientSteps<'a> {
+pub struct LinearGradientSteps<'a> {
     gradient: &'a LinearGradient,
     current: usize,
     count: usize,
@@ -209,13 +201,6 @@ mod tests {
         assert_eq!(color.r(), 127);
         assert_eq!(color.g(), 102);
         assert_eq!(color.b(), 255);
-    }
-
-    #[test]
-    fn should_return_the_correct_ansi_code() {
-        let color = RGBColor(127, 102, 255);
-        assert_eq!(color.ansi(), "\x1b[38;2;127;102;255m");
-        assert_eq!(color.ansi_bg(), "\x1b[48;2;127;102;255m");
     }
 
     #[test]

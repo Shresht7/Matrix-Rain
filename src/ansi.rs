@@ -8,6 +8,13 @@ use std::str::FromStr;
 #[derive(Clone, Copy, Debug)]
 pub struct RGBColor(pub u8, pub u8, pub u8);
 
+/// Parse a [RGBColor] from a tuple of (u8, u8, u8)
+impl From<(u8, u8, u8)> for RGBColor {
+    fn from(value: (u8, u8, u8)) -> Self {
+        Self(value.0, value.1, value.2)
+    }
+}
+
 // Implement the FromStr trait for RGBColor to parse the command-line argument
 impl FromStr for RGBColor {
     type Err = ParseErrorKind;

@@ -13,25 +13,13 @@ impl FromStr for RGBColor {
     type Err = ParseErrorKind;
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        let parts: Vec<&str> = s.split(',').collect();
-
-        if parts.len() == 1 {
-            if parts[0].starts_with('#') {
-                return RGBColor::from_hex_str(parts[0]);
-            } else {
-                return RGBColor::from_named_color(parts[0]);
-            }
+        if s.starts_with('#') {
+            return RGBColor::from_hex_str(s);
+        } else if s.contains(',') {
+            return RGBColor::from_rgb_str(s);
+        } else {
+            return RGBColor::from_named_color(s);
         }
-
-        if parts.len() != 3 {
-            return Err(ParseErrorKind::InvalidFormat(s.to_string()));
-        }
-
-        return Ok(RGBColor(
-            parts[0].parse().map_err(ParseErrorKind::InvalidHexValue)?,
-            parts[1].parse().map_err(ParseErrorKind::InvalidHexValue)?,
-            parts[2].parse().map_err(ParseErrorKind::InvalidHexValue)?,
-        ));
     }
 }
 
@@ -43,6 +31,20 @@ impl RGBColor {
         let g = u8::from_str_radix(&color[2..4], 16).map_err(ParseErrorKind::InvalidHexValue)?;
         let b = u8::from_str_radix(&color[4..6], 16).map_err(ParseErrorKind::InvalidHexValue)?;
         Ok(Self(r, g, b))
+    }
+
+    /// Parses a rgb color into a [RGBColor] value
+    fn from_rgb_str(s: &str) -> Result<Self, ParseErrorKind> {
+        let parts: Vec<&str> = s.split(',').map(|part| part.trim()).collect();
+        if parts.len() == 3 {
+            if let (Ok(r), Ok(g), Ok(b)) = (parts[0].parse(), parts[1].parse(), parts[2].parse()) {
+                return Ok(Self(r, g, b));
+            } else {
+                return Err(ParseErrorKind::InvalidFormat(s.to_string()));
+            }
+        } else {
+            Err(ParseErrorKind::InvalidFormat(s.to_string()))
+        }
     }
 
     /// Parses a named-color into a [RGBColor] value

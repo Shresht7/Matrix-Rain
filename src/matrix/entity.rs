@@ -12,30 +12,36 @@ use super::symbols;
 //  ENTITY
 //  ======
 
-/// Represents a single entity in the matrix-stream
+/// Represents a single entity in the [matrix-stream](super::Stream).
+/// Holds information about the position, speed and character symbol.
 pub struct Entity {
-    /// x position
+    /// The x-position
     pub x: f32,
-    /// y position
+    /// The y-position
     pub y: f32,
-    /// rain-fall speed
+    /// Rain-fall speed
     speed: f32,
-    /// entity color
-    color: ansi::RGBColor,
-    /// entity symbol
+
+    /// The symbol the entity represents
     symbol: char,
-    /// character set mode
+    /// The color of the symbol
+    color: ansi::RGBColor,
+    /// The character set to use for the symbols
     mode: symbols::Symbols,
-    /// frame-count since last switch
+    /// The frame-count since last symbol switch.
+    /// When this number reaches the `switch_interval`, the character symbol
+    /// is swapped for another one, chosen randomly, from the symbol character set.
     frame_count: u16,
-    /// number of frames before character switch
+    /// The number of frames before a symbol switch.
+    /// When the `frame_count` reaches this value, the symbol is swapped
+    /// for another one, chosen randomly, from the symbol character set.
     switch_interval: u16,
 }
 
 impl Entity {
-    /// Entity constructor
+    /// Constructs a new matrix [Entity]
     pub fn new(x: f32, y: f32, speed: f32, color: ansi::RGBColor, config: &config::Config) -> Self {
-        return Self {
+        Self {
             x,
             y,
             speed,
@@ -44,34 +50,34 @@ impl Entity {
             mode: config.mode.clone(),
             frame_count: 0,
             switch_interval: utils::random_between::<u16>(1, 60),
-        };
+        }
     }
 
-    /// Set Entity Symbol
+    /// Updates the [Entity] symbol by picking one randomly from the symbol set
     pub fn set_symbol(&mut self) {
         self.symbol = self.mode.get_random();
     }
 
-    /// Rain
+    /// Rain. Updates the position of the [Entity] using the rain speed.
     pub fn rain(&mut self) {
-        self.y += self.speed
+        self.y += self.speed;
     }
 
-    /// Render entity on screen
+    /// Render Entity on screen
     pub fn render(&mut self, stdout: &mut std::io::Stdout) -> std::io::Result<()> {
-        //  Don't render if y is above screen
+        // Don't render if y is above screen
         if self.y < 0.0 {
             return Ok(());
         }
 
-        //  Move cursor to position and write symbol
+        // Move cursor to position and write symbol
         stdout
             .queue(cursor::MoveTo(self.x as u16, self.y as u16))?
-            .queue(Print(format!("{}", ansi::rgb(&self.symbol, self.color))))?;
+            .queue(Print(ansi::rgb(&self.symbol, self.color)))?;
 
-        //  Switch symbol if frame_count exceeds switch_interval
+        // Switch symbol if frame_count exceeds switch_interval
         if self.frame_count % self.switch_interval == 0 {
-            self.set_symbol()
+            self.set_symbol();
         }
         self.frame_count += 1;
 

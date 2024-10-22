@@ -19,7 +19,7 @@ impl RGBColor {
     }
     /// Returns the blue value of the [RGBColor]
     pub fn b(&self) -> u8 {
-        self.0
+        self.2
     }
     /// Returns the ANSI escape code for the [RGBColor]
     pub fn ansi(&self) -> String {

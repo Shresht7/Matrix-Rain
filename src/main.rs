@@ -7,7 +7,7 @@ use crossterm::{
     terminal, QueueableCommand,
 };
 
-mod ansi;
+mod colors;
 mod config;
 mod events;
 mod matrix;

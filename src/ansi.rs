@@ -1,4 +1,4 @@
-use std::str::FromStr;
+use std::{slice::Iter, str::FromStr};
 
 // ---------
 // RGB COLOR
@@ -102,6 +102,40 @@ pub fn rgb(s: &char, color: RGBColor) -> String {
         color.2,
         s.to_string()
     )
+}
+
+// ---------
+// GRADIENTS
+// ---------
+
+pub struct LinearGradient {
+    start: RGBColor,
+    end: RGBColor,
+    delta: (i16, i16, i16),
+}
+
+impl LinearGradient {
+    /// Instantiate a new linear gradient
+    pub fn new(start: RGBColor, end: RGBColor) -> Self {
+        let delta = (
+            end.r() as i16 - start.r() as i16,
+            end.g() as i16 - start.g() as i16,
+            end.b() as i16 - start.b() as i16,
+        );
+        Self { start, end, delta }
+    }
+
+    /// Interpolate between two colors. The factor has to be between 0 and 1
+    pub fn interpolate(&self, factor: f32) -> RGBColor {
+        assert!(
+            factor >= 0.0 && factor <= 1.0,
+            "The factor value must be between 0 and 1"
+        );
+        let r = self.start.r() as f32 + factor * self.delta.0 as f32;
+        let g = self.start.g() as f32 + factor * self.delta.1 as f32;
+        let b = self.start.b() as f32 + factor * self.delta.2 as f32;
+        RGBColor(r.round() as u8, g.round() as u8, b.round() as u8)
+    }
 }
 
 // ------

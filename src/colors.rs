@@ -93,6 +93,18 @@ impl RGBColor {
     }
 }
 
+impl std::ops::Mul<f32> for RGBColor {
+    type Output = RGBColor;
+
+    fn mul(self, rhs: f32) -> Self::Output {
+        RGBColor(
+            (self.r() as f32 * rhs).min(255.0).max(0.0) as u8,
+            (self.g() as f32 * rhs).min(255.0).max(0.0) as u8,
+            (self.b() as f32 * rhs).min(255.0).max(0.0) as u8,
+        )
+    }
+}
+
 /// Color string with ANSI RGBColor color code
 pub fn rgb(s: &char, color: RGBColor) -> String {
     format!(
@@ -292,5 +304,12 @@ mod tests {
         let str = '#';
         let ansi_str = "\x1b[38;2;127;102;167m#\x1b[0m";
         assert_eq!(rgb(&str, color), ansi_str);
+    }
+
+    #[test]
+    fn should_perform_scalar_multiplication_with_overloaded_operator() {
+        let color = RGBColor(50, 67, 150);
+        let new_color = color * 2.0;
+        assert_eq!(new_color, RGBColor(100, 134, 255));
     }
 }

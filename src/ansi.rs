@@ -1,7 +1,6 @@
-// Library
-use std::result::Result;
 use std::str::FromStr;
 
+// ---------
 // RGB COLOR
 // ---------
 
@@ -11,7 +10,7 @@ pub struct RGBColor(pub u8, pub u8, pub u8);
 
 // Implement the FromStr trait for RGBColor to parse the command-line argument
 impl FromStr for RGBColor {
-    type Err = anyhow::Error;
+    type Err = ParseErrorKind;
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         let parts: Vec<&str> = s.split(',').collect();
@@ -25,13 +24,13 @@ impl FromStr for RGBColor {
         }
 
         if parts.len() != 3 {
-            return Err(anyhow::Error::msg("RGBColor must be in the format 'r,g,b'"));
+            return Err(ParseErrorKind::InvalidFormat(s.to_string()));
         }
 
         return Ok(RGBColor(
-            parts[0].parse()?,
-            parts[1].parse()?,
-            parts[2].parse()?,
+            parts[0].parse().map_err(ParseErrorKind::InvalidHexValue)?,
+            parts[1].parse().map_err(ParseErrorKind::InvalidHexValue)?,
+            parts[2].parse().map_err(ParseErrorKind::InvalidHexValue)?,
         ));
     }
 }
@@ -50,15 +49,17 @@ pub fn rgb(s: &char, color: RGBColor) -> String {
 // HELPER FUNCTIONS
 // ----------------
 
-pub fn parse_hex_color(color: &str) -> Result<RGBColor, anyhow::Error> {
+/// Parses a hex-color (#rrggbb format) into a [RGBColor] value
+pub fn parse_hex_color(color: &str) -> Result<RGBColor, ParseErrorKind> {
     let color = color.trim_start_matches('#');
-    let r = u8::from_str_radix(&color[0..2], 16)?;
-    let g = u8::from_str_radix(&color[2..4], 16)?;
-    let b = u8::from_str_radix(&color[4..6], 16)?;
+    let r = u8::from_str_radix(&color[0..2], 16).map_err(ParseErrorKind::InvalidHexValue)?;
+    let g = u8::from_str_radix(&color[2..4], 16).map_err(ParseErrorKind::InvalidHexValue)?;
+    let b = u8::from_str_radix(&color[4..6], 16).map_err(ParseErrorKind::InvalidHexValue)?;
     Ok(RGBColor(r, g, b))
 }
 
-pub fn parse_named_color(color: &str) -> Result<RGBColor, anyhow::Error> {
+/// Parses a named-color into a [RGBColor] value
+pub fn parse_named_color(color: &str) -> Result<RGBColor, ParseErrorKind> {
     match color.to_lowercase().as_str() {
         "black" => Ok(RGBColor(0, 0, 0)),
         "red" => Ok(RGBColor(255, 0, 0)),
@@ -68,6 +69,32 @@ pub fn parse_named_color(color: &str) -> Result<RGBColor, anyhow::Error> {
         "magenta" => Ok(RGBColor(255, 0, 255)),
         "cyan" => Ok(RGBColor(0, 255, 255)),
         "white" => Ok(RGBColor(255, 255, 255)),
-        _ => Err(anyhow::Error::msg("Invalid color name")),
+        name => Err(ParseErrorKind::UnsupportedName(name.to_string())),
     }
 }
+// ------
+// ERRORS
+// ------
+
+/// Errors that can occur when trying to parse [RGBColor]
+#[derive(Debug)]
+pub enum ParseErrorKind {
+    /// The provided format was invalid
+    InvalidFormat(String),
+    /// The color name is not supported
+    UnsupportedName(String),
+    /// Failed to parse hex value
+    InvalidHexValue(std::num::ParseIntError),
+}
+
+impl std::fmt::Display for ParseErrorKind {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            ParseErrorKind::InvalidFormat(format) => write!(f, "Invalid color format: {format}"),
+            ParseErrorKind::UnsupportedName(name) => write!(f, "Unsupported color name: {name}"),
+            ParseErrorKind::InvalidHexValue(v) => write!(f, "Invalid hex value: {v}"),
+        }
+    }
+}
+
+impl std::error::Error for ParseErrorKind {}

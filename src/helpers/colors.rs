@@ -153,14 +153,14 @@ impl LinearGradient {
         RGBColor(r.round() as u8, g.round() as u8, b.round() as u8)
     }
 
-    /// Returns an iterator over each color stop
-    pub fn steps(&self, count: usize) -> LinearGradientSteps {
-        LinearGradientSteps {
-            gradient: self,
-            current: 0,
-            count,
-        }
-    }
+    // /// Returns an iterator over each color stop
+    // pub fn steps(&self, count: usize) -> LinearGradientSteps {
+    //     LinearGradientSteps {
+    //         gradient: self,
+    //         current: 0,
+    //         count,
+    //     }
+    // }
 }
 
 // ------

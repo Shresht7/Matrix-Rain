@@ -104,7 +104,6 @@ impl std::ops::Mul<f32> for RGBColor {
 pub struct LinearGradient {
     start: RGBColor,
     end: RGBColor,
-    delta: (i16, i16, i16),
 }
 
 pub struct LinearGradientSteps<'a> {
@@ -130,12 +129,15 @@ impl<'a> Iterator for LinearGradientSteps<'a> {
 impl LinearGradient {
     /// Instantiate a new linear gradient
     pub fn new(start: RGBColor, end: RGBColor) -> Self {
-        let delta = (
-            end.r() as i16 - start.r() as i16,
-            end.g() as i16 - start.g() as i16,
-            end.b() as i16 - start.b() as i16,
-        );
-        Self { start, end, delta }
+        Self { start, end }
+    }
+
+    pub fn delta(&self) -> (i16, i16, i16) {
+        (
+            self.end.r() as i16 - self.start.r() as i16,
+            self.end.g() as i16 - self.start.g() as i16,
+            self.end.b() as i16 - self.start.b() as i16,
+        )
     }
 
     /// Interpolate between two colors. The factor has to be between 0 and 1
@@ -144,9 +146,10 @@ impl LinearGradient {
             factor >= 0.0 && factor <= 1.0,
             "The factor value must be between 0 and 1"
         );
-        let r = self.start.r() as f32 + factor * self.delta.0 as f32;
-        let g = self.start.g() as f32 + factor * self.delta.1 as f32;
-        let b = self.start.b() as f32 + factor * self.delta.2 as f32;
+        let delta = self.delta();
+        let r = self.start.r() as f32 + factor * delta.0 as f32;
+        let g = self.start.g() as f32 + factor * delta.1 as f32;
+        let b = self.start.b() as f32 + factor * delta.2 as f32;
         RGBColor(r.round() as u8, g.round() as u8, b.round() as u8)
     }
 

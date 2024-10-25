@@ -61,8 +61,8 @@ impl Matrix {
         config: &config::Config,
         stdout: &mut std::io::Stdout,
     ) -> std::io::Result<()> {
-        // Pre-populate the matrix background with random symbols if the `--start-with-background` option was set
-        if config.start_with_background {
+        // Pre-populate the matrix background with random symbols if the `--leave_trail` option was set
+        if config.leave_trail {
             self.populate_background(config, stdout)?;
         }
         Ok(())

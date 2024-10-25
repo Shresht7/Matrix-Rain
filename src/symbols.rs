@@ -13,6 +13,8 @@ pub enum Symbols {
     Original,
     ///  Binary Symbols: Only `0` and `1`
     Binary,
+    /// Decimal Numbers: From 0 to 9
+    Decimal,
     /// ASCII Symbols: Printable characters from 33 to 126 (0x21 to 0x7E). (from '!' to '~', including A-Z, a-z, 0-9 etc.)
     ASCII,
     /// Mathematical Symbols: Various mathematical characters like: ∐, ∑, ≠, →
@@ -32,6 +34,7 @@ impl FromStr for Symbols {
         match s.to_lowercase().as_str() {
             "original" | "normal" | "katakana" => Ok(Self::Original),
             "binary" | "bin" => Ok(Self::Binary),
+            "decimal" | "numbers" | "digits" => Ok(Self::Decimal),
             "maths" | "math" | "mathematics" => Ok(Self::Math),
             "ascii" | "text" | "english" => Ok(Self::ASCII),
             "braille" | "dots" => Ok(Self::Braille),
@@ -53,6 +56,11 @@ impl Symbols {
             Self::Binary => {
                 let r = utils::random_between(0, 2);
                 return if r == 0 { '0' } else { '1' };
+            }
+
+            Self::Decimal => {
+                let r = utils::random_between(0, 10);
+                return std::char::from_digit(r, 10).unwrap_or('0');
             }
 
             Self::ASCII => {

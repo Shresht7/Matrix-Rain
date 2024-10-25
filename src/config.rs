@@ -15,6 +15,7 @@ pub struct Config {
     /// Valid Options:
     /// - "Original" | "Normal" | "Katakana" -> Original Katakana Symbols (e.g. ア, カ, サ, ナ)
     /// - "Binary" | "Bin"                   -> 0s and 1s
+    /// - "Decimal" | "Numbers" | "Digits"   -> Decimal numbers from 0 to 9
     /// - "Math" | "Maths" | "Mathematics"   -> Mathematical Symbols (e.g. ∐, ∑, ≠, →)
     /// - "ASCII" | "Text" | "English"       -> ASCII Characters (from '!' to '~', including A-Z, a-z, 0-9 etc.)
     /// - "Braille" | "Dots"                 -> Braille patterns (e.g  ⠇, ⠾, ⣿)

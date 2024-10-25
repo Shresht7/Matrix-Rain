@@ -9,15 +9,15 @@ use crate::helpers::utils;
 ///  The character symbol set to use for the entities
 #[derive(Clone, Debug)]
 pub enum Symbols {
-    ///  Katakana Symbols: Unicode range from 0x30A0 to 0x30A0 + 96 (96 Katakana characters)
+    ///  Katakana Symbols: Unicode range from 0x30A0 to 0x30A0 + 96 (96 Katakana characters) (e.g. ア, カ, サ, ナ)
     Original,
-    ///  Binary Symbols: Only '0' and '1'
+    ///  Binary Symbols: Only `0` and `1`
     Binary,
     /// ASCII Symbols: Printable characters from 33 to 126 (0x21 to 0x7E). (from '!' to '~', including A-Z, a-z, 0-9 etc.)
     ASCII,
     /// Mathematical Symbols: Various mathematical characters like: ∐, ∑, ≠, →
     Math,
-    /// Braille Symbols: Unicode range from 0x2840 to 0x2840 + 63 (64 Braille patterns)
+    /// Braille Symbols: Unicode range from 0x2840 to 0x2840 + 63 (64 Braille patterns) (e.g  ⠇, ⠾, ⣿)
     Braille,
     /// Emoji (Cursed) Symbols: Unicode range from 0x1F300 to 0x1F3F0 (various emojis)
     Cursed,
@@ -45,26 +45,22 @@ impl Symbols {
     /// Get a random character from the symbol set
     pub fn get_random(&self) -> char {
         match self {
-            // Katakana Symbols: Unicode range from 0x30A0 to 0x30A0 + 96 (96 Katakana characters)
             Self::Original => {
                 let r = utils::random_between(0x30a0, 0x30a0 + 96) as u32;
                 return std::char::from_u32(r).unwrap_or('0');
             }
 
-            // Binary Symbols: Only '0' and '1'
             Self::Binary => {
                 let r = utils::random_between(0, 2);
                 return if r == 0 { '0' } else { '1' };
             }
 
-            // ASCII Symbols: Printable characters from 33 to 126 (0x21 to 0x7E). (from '!' to '~', including A-Z, a-z, 0-9 etc.)
             Self::ASCII => {
                 let r = utils::random_between(33, 127) as u32;
                 return std::char::from_u32(r).unwrap_or('0');
             }
 
-            // Mathematical Symbols: Various mathematical characters like: ∐, ∑, ≠, →
-            Symbols::Math => {
+            Self::Math => {
                 // Choose a range randomly for different categories of mathematical symbols
                 let category = utils::random_between(0, 4);
                 let r = match category {
@@ -76,19 +72,16 @@ impl Symbols {
                 return std::char::from_u32(r).unwrap_or('0');
             }
 
-            // Braille Symbols: Unicode range from 0x2840 to 0x2840 + 63 (64 Braille patterns)
             Self::Braille => {
                 let r = utils::random_between(0x2840, 0x2840 + 63) as u32;
                 return std::char::from_u32(r).unwrap_or('0');
             }
 
-            // Emoji (Cursed) Symbols: Unicode range from 0x1F300 to 0x1F3F0 (various emojis)
             Self::Cursed => {
                 let r = utils::random_between(0x1f300, 0x1f3f0) as u32;
                 return std::char::from_u32(r).unwrap_or('0');
             }
 
-            // Custom Symbols: User-defined symbol set
             Self::Custom(s) => {
                 let r = utils::random_between(0, s.len());
                 return s.chars().nth(r).unwrap_or('0');

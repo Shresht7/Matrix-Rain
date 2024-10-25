@@ -10,8 +10,19 @@ use crate::symbols;
 #[derive(Parser, Debug)]
 #[command(version, about)]
 pub struct Config {
-    /// Character Symbol Set
-    #[clap(long, default_value = "Original")]
+    /// The character symbol set to use
+    ///
+    /// Valid Options:
+    /// - "Original" | "Normal" | "Katakana" -> Original Katakana Symbols (e.g. ア, カ, サ, ナ)
+    /// - "Binary" | "Bin"                   -> 0s and 1s
+    /// - "Math" | "Maths" | "Mathematics"   -> Mathematical Symbols (e.g. ∐, ∑, ≠, →)
+    /// - "ASCII" | "Text" | "English"       -> ASCII Characters (from '!' to '~', including A-Z, a-z, 0-9 etc.)
+    /// - "Braille" | "Dots"                 -> Braille patterns (e.g  ⠇, ⠾, ⣿)
+    /// - "Emoji" | "Cursed"                 -> Emojis
+    /// - "abc123"                           -> Custom character set consisting of "a", "b", "c", "1", "2" and "3"
+    ///
+    /// The options can be in all lower-case.
+    #[clap(long, default_value = "Original", verbatim_doc_comment)]
     pub mode: symbols::Symbols,
 
     /// Default color of the streaming entities

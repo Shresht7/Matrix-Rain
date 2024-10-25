@@ -45,6 +45,9 @@ fn run(config: &config::Config) -> std::io::Result<()> {
     // Setup the terminal before running the application
     setup(&mut stdout)?;
 
+    // Setup the Matrix renderer
+    matrix.setup(config, &mut stdout)?;
+
     //  Render the Matrix-Rain on screen
     loop {
         //  Render each stream

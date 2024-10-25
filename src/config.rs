@@ -76,4 +76,8 @@ pub struct Config {
     /// symbol as they rain down the screen.
     #[clap(long, default_value_t = 1)]
     pub switch_interval: u16,
+
+    /// Pre-populate the background with random symbols as soon as the rendering starts
+    #[clap(long)]
+    pub start_with_background: bool,
 }

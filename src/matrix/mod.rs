@@ -5,6 +5,11 @@ use super::{config, helpers::utils, symbols};
 mod entity;
 mod stream;
 
+use crossterm::{
+    cursor::{self, MoveToNextLine},
+    style::Print,
+    QueueableCommand,
+};
 use stream::Stream;
 
 //  ======
@@ -50,6 +55,19 @@ impl Matrix {
         return ret;
     }
 
+    /// The setup function is called once before the draw loop starts
+    pub fn setup(
+        &mut self,
+        config: &config::Config,
+        stdout: &mut std::io::Stdout,
+    ) -> std::io::Result<()> {
+        // Pre-populate the matrix background with random symbols if the `--start-with-background` option was set
+        if config.start_with_background {
+            self.populate_background(config, stdout)?;
+        }
+        Ok(())
+    }
+
     /// Render the Matrix
     pub fn render(
         &mut self,
@@ -60,6 +78,34 @@ impl Matrix {
             stream.render(self.rows as i32, config, stdout)?;
         }
         stdout.flush()?;
+        Ok(())
+    }
+
+    /// Pre-populate the background with faint symbols before the first render
+    pub fn populate_background(
+        &mut self,
+        config: &config::Config,
+        stdout: &mut std::io::Stdout,
+    ) -> std::io::Result<()> {
+        // Determine the faint color of the trailing end of streams
+        let clr = config.stream_color * config.stream_color_gradient_factor;
+        // Go to the home position and set the RGB ANSI code
+        stdout.queue(cursor::MoveTo(0, 0))?.queue(Print(format!(
+            "\x1b[38;2;{};{};{}m",
+            clr.r(),
+            clr.g(),
+            clr.b()
+        )))?;
+        // Iterate over each row and pre-render random faint symbols
+        for _ in 0..self.rows {
+            let random_symbol_str =
+                String::from_iter((0..self.columns).map(|_| config.mode.get_random()));
+            stdout
+                .queue(Print(random_symbol_str))?
+                .queue(MoveToNextLine(1))?;
+        }
+        // Reset the ANSI color codes
+        stdout.queue(Print("\x1b[0m"))?.flush()?;
         Ok(())
     }
 }

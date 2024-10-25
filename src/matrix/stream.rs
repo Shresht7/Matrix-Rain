@@ -92,9 +92,11 @@ impl Stream {
             // Clean up the last entity. As the stream moves down, all entities will be overwritten
             // by the next frame, except for the trailing entity. So we manually overwrite it so that
             // the stream doesn't leave a trail.
-            stdout
-                .queue(cursor::MoveTo(e.x as u16, e.y as u16))?
-                .queue(Print(" "))?;
+            if !config.leave_trail {
+                stdout
+                    .queue(cursor::MoveTo(e.x as u16, e.y as u16))?
+                    .queue(Print(" "))?;
+            }
 
             // This is also a good time to check if the last entity is off screen,
             // (i.e. the y position is greater than the number of rows)

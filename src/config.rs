@@ -46,6 +46,12 @@ pub struct Config {
     #[clap(long, default_value = "200,255,200")]
     pub leading_entity_color: colors::RGBColor,
 
+    /// Leaves the trail intact
+    ///
+    /// As the streams pass-by, the leave behind a visible trail. Use this option if you want even more characters on screen.
+    #[clap(long)]
+    pub leave_trail: bool,
+
     /// The Frame-Rate to run at. The screen will rerender this many times each second.
     #[clap(long, default_value_t = 60)]
     pub fps: u16,

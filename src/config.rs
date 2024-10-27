@@ -1,3 +1,6 @@
+use std::str::FromStr;
+use std::string::ParseError;
+
 use clap::Parser;
 
 use crate::helpers::colors;
@@ -76,4 +79,31 @@ pub struct Config {
     /// symbol as they rain down the screen.
     #[clap(long, default_value_t = 1)]
     pub switch_interval: u16,
+
+    /// The direction of motion for the stream particles
+    #[clap(long, default_value = "down")]
+    pub direction: Direction,
+}
+
+#[derive(Default, Clone, Debug)]
+pub enum Direction {
+    #[default]
+    Down,
+    Up,
+    Left,
+    Right,
+}
+
+impl FromStr for Direction {
+    type Err = ParseError;
+
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s.to_lowercase().as_str() {
+            "up" | "vertical-reverse" => Ok(Self::Up),
+            "down" | "vertical" => Ok(Self::Down),
+            "left" | "horizontal" => Ok(Self::Left),
+            "right" | "horizontal-reverse" => Ok(Self::Right),
+            _ => Ok(Self::default()),
+        }
+    }
 }

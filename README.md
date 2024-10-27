@@ -9,9 +9,9 @@ The matrix-rain effect in the terminal.
 >
 > Just a simple program I made while learning Rust!
 
-## Features
+## 🌟 Features
 
-- Multiple character symbol sets, including original `Katakana` symbols, `binary`, `decimal`, `mathematical` symbols, `ASCII` characters, `Braille` patterns, and `emojis`.
+- Multiple character symbol sets, including original `Katakana` symbols, `binary`, `decimal`, `mathematical` symbols, `ASCII` characters, `Braille` patterns and more.
 - Customizable stream colors and gradients.
 - Adjustable frame rate, stream count, and spacing.
 - Option to leave a trail of characters as the streams pass by.
@@ -19,11 +19,13 @@ The matrix-rain effect in the terminal.
 
 ---
 
-## Installation
+## 🛠️ Installation
 
-To install and run Matrix-Rain, you will need to have Rust and Cargo installed on your system. You can install Rust and Cargo by following the instructions at [https://www.rust-lang.org/tools/install](https://www.rust-lang.org/tools/install).
+> [!NOTE]
+> 
+> To install and run Matrix-Rain, you will need to have Rust and Cargo installed on your system. You can install Rust and Cargo by following the instructions at [https://www.rust-lang.org/tools/install](https://www.rust-lang.org/tools/install).
 
-Once you have Rust and Cargo installed, you can clone the repository and build the project:
+You can clone the repository and build the project:
 
 ```sh
 git clone https://github.com/Shresht7/matrix-rain.git
@@ -37,9 +39,7 @@ To run the project, use the following command:
 cargo run --release
 ```
 
-### Using `cargo install`
-
-You can also install Matrix-Rain using `cargo install` and add it to your `$PATH` variable for easy access:
+Or **alternatively**, you can also install `Matrix-Rain` using `cargo install` and add it to your `$PATH` variable for easy access:
 
 ```sh
 cargo install --path . --name matrix-rain
@@ -49,7 +49,7 @@ After installation, you can run Matrix-Rain from anywhere by adding the Cargo bi
 
 ---
 
-## Usage Instructions
+## 📖 Usage Instructions
 
 To use Matrix-Rain, you can run the project with the following command:
 
@@ -66,7 +66,7 @@ Here are some examples of how to use the different configuration options:
 
 - To use binary symbols with a custom stream color and gradient:
   ```sh
-  matrix-rain --mode Binary --stream-color 0,255,70 --stream-color-gradient-factor 0.5
+  matrix-rain --mode binary --stream-color 0,255,70 --stream-color-gradient-factor 0.5
   ```
 
 - To use ASCII characters with a higher frame rate and leave a trail:
@@ -74,7 +74,9 @@ Here are some examples of how to use the different configuration options:
   matrix-rain --mode ASCII --fps 120 --leave-trail
   ```
 
-You can combine multiple options to customize the matrix-rain effect to your liking.
+> [!TIP]
+> 
+> You can combine multiple options to customize the matrix-rain effect to your liking.
 
 ### Configuration Options
 

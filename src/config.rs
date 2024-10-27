@@ -107,3 +107,19 @@ impl FromStr for Direction {
         }
     }
 }
+
+impl Direction {
+    pub fn is_vertical(&self) -> bool {
+        match self {
+            Direction::Up | Direction::Down => true,
+            _ => false,
+        }
+    }
+
+    pub fn is_horizontal(&self) -> bool {
+        match self {
+            Direction::Left | Direction::Right => true,
+            _ => false,
+        }
+    }
+}

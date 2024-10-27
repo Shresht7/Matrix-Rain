@@ -37,6 +37,16 @@ To run the project, use the following command:
 cargo run --release
 ```
 
+### Using `cargo install`
+
+You can also install Matrix-Rain using `cargo install` and add it to your `$PATH` variable for easy access:
+
+```sh
+cargo install --path .
+```
+
+After installation, you can run Matrix-Rain from anywhere by adding the Cargo bin directory to your `$PATH` variable.
+
 ---
 
 ## Usage Instructions

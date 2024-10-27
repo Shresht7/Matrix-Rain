@@ -42,7 +42,7 @@ cargo run --release
 You can also install Matrix-Rain using `cargo install` and add it to your `$PATH` variable for easy access:
 
 ```sh
-cargo install --path .
+cargo install --path . --name matrix-rain
 ```
 
 After installation, you can run Matrix-Rain from anywhere by adding the Cargo bin directory to your `$PATH` variable.
@@ -54,24 +54,24 @@ After installation, you can run Matrix-Rain from anywhere by adding the Cargo bi
 To use Matrix-Rain, you can run the project with the following command:
 
 ```sh
-cargo run --release -- [OPTIONS]
+matrix-rain [OPTIONS]
 ```
 
 Here are some examples of how to use the different configuration options:
 
 - To use the original Katakana symbols with the default settings:
   ```sh
-  cargo run --release
+  matrix-rain
   ```
 
 - To use binary symbols with a custom stream color and gradient:
   ```sh
-  cargo run --release -- --mode Binary --stream-color 0,255,70 --stream-color-gradient-factor 0.5
+  matrix-rain --mode Binary --stream-color 0,255,70 --stream-color-gradient-factor 0.5
   ```
 
 - To use ASCII characters with a higher frame rate and leave a trail:
   ```sh
-  cargo run --release -- --mode ASCII --fps 120 --leave-trail
+  matrix-rain --mode ASCII --fps 120 --leave-trail
   ```
 
 You can combine multiple options to customize the matrix-rain effect to your liking.

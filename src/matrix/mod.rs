@@ -1,8 +1,10 @@
 use std::io::Write;
 
-use crate::config::Direction;
-
-use super::{config, helpers::utils, symbols};
+use super::{
+    config,
+    helpers::{direction::Direction, utils},
+    symbols,
+};
 
 mod entity;
 mod stream;
@@ -97,7 +99,7 @@ impl Matrix {
         stdout: &mut std::io::Stdout,
     ) -> std::io::Result<()> {
         for stream in self.streams.iter_mut() {
-            stream.render(self.rows as i32, config, stdout)?;
+            stream.render(self.rows as i32, self.columns as i32, config, stdout)?;
         }
         stdout.flush()?;
         Ok(())

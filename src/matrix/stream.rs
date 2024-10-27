@@ -2,8 +2,8 @@ use crossterm::cursor;
 use crossterm::style::Print;
 use crossterm::QueueableCommand;
 
-use crate::config::{self, Direction};
-use crate::helpers::{colors, utils};
+use crate::config;
+use crate::helpers::{colors, direction::Direction, utils};
 
 use super::entity::Entity;
 
@@ -53,11 +53,20 @@ impl Stream {
         // Randomize the count
         self.count = utils::random_between(config.stream_min_count, config.stream_max_count);
 
+        // Determine the speed based on the direction of motion
+        let (speed_x, speed_y) = match config.direction {
+            Direction::Down => (0.0, self.speed),
+            Direction::Up => (0.0, -self.speed),
+            Direction::Left => (self.speed, 0.0),
+            Direction::Right => (-self.speed, 0.0),
+        };
+
         // Create the leading entity
         self.entities.push(Entity::new(
             self.x,
             self.y,
-            self.speed,
+            speed_x,
+            speed_y,
             config.leading_entity_color,
             config,
         ));
@@ -76,14 +85,16 @@ impl Stream {
             // Create the entity and add it to the entities vector
             let mut e = match config.direction {
                 Direction::Down => {
-                    Entity::new(self.x, self.y - i as f32, self.speed, color, config)
+                    Entity::new(self.x, self.y - i as f32, speed_x, speed_y, color, config)
                 }
-                Direction::Up => Entity::new(self.x, self.y + i as f32, self.speed, color, config),
+                Direction::Up => {
+                    Entity::new(self.x, self.y + i as f32, speed_x, speed_y, color, config)
+                }
                 Direction::Left => {
-                    Entity::new(self.x + 1.0, self.y as f32, self.speed, color, config)
+                    Entity::new(self.x - i as f32, self.y, speed_x, speed_y, color, config)
                 }
                 Direction::Right => {
-                    Entity::new(self.x - 1.0, self.y as f32, self.speed, color, config)
+                    Entity::new(self.x + i as f32, self.y, speed_x, speed_y, color, config)
                 }
             };
             e.set_symbol();
@@ -95,6 +106,7 @@ impl Stream {
     pub fn render(
         &mut self,
         rows: i32,
+        columns: i32,
         config: &config::Config,
         stdout: &mut std::io::Stdout,
     ) -> std::io::Result<()> {
@@ -112,15 +124,22 @@ impl Stream {
             // This is also a good time to check if the last entity is off screen,
             // (i.e. the y position is greater than the number of rows)
             // and if it is, we regenerate the stream and place it back at the top.
-            if e.y >= rows as f32 {
-                self.generate_entities(&config);
+            let should_regenerate = match config.direction {
+                Direction::Down => self.y >= rows as f32,
+                Direction::Up => self.y < 0.0,
+                Direction::Left => self.x >= columns as f32,
+                Direction::Right => self.x < 0.0,
+            };
+
+            if should_regenerate {
+                self.generate_entities(config);
             }
         }
 
         // Move the stream down and render each entity
         for entity in self.entities.iter_mut() {
             entity.rain();
-            entity.render(stdout)?;
+            entity.render(rows, columns, stdout, config)?;
         }
 
         Ok(())

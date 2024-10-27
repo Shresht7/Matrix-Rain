@@ -2,7 +2,7 @@ use crossterm::cursor;
 use crossterm::style::Print;
 use crossterm::QueueableCommand;
 
-use crate::config;
+use crate::config::{self, Direction};
 use crate::helpers::{colors, utils};
 
 use super::entity::Entity;
@@ -74,7 +74,18 @@ impl Stream {
             let color = gradient.interpolate(i as f32 / self.count as f32);
 
             // Create the entity and add it to the entities vector
-            let mut e = Entity::new(self.x, self.y - i as f32, self.speed, color, config);
+            let mut e = match config.direction {
+                Direction::Down => {
+                    Entity::new(self.x, self.y - i as f32, self.speed, color, config)
+                }
+                Direction::Up => Entity::new(self.x, self.y + i as f32, self.speed, color, config),
+                Direction::Left => {
+                    Entity::new(self.x + 1.0, self.y as f32, self.speed, color, config)
+                }
+                Direction::Right => {
+                    Entity::new(self.x - 1.0, self.y as f32, self.speed, color, config)
+                }
+            };
             e.set_symbol();
             self.entities.push(e);
         }

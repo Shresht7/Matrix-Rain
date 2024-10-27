@@ -83,6 +83,34 @@ The different configuration options available in this project are:
 
 These options are defined in the `src/config.rs` file.
 
+### Modes
+
+The different modes available for the `mode` option are:
+
+* "Original" | "Normal" | "Katakana": Original Katakana Symbols (e.g., ア, カ, サ, ナ)
+* "Binary" | "Bin": 0s and 1s
+* "Decimal" | "Numbers" | "Digits": Decimal numbers from 0 to 9
+* "Math" | "Maths" | "Mathematics": Mathematical Symbols (e.g., ∐, ∑, ≠, →)
+* "ASCII" | "Text" | "English": ASCII Characters (from '!' to '~', including A-Z, a-z, 0-9, etc.)
+* "Braille" | "Dots": Braille patterns (e.g., ⠇, ⠾, ⣿)
+* "Emoji" | "Cursed": Emojis
+* Custom sets like "abc123": User-defined symbol set
+
+These modes are defined in the `src/config.rs` file.
+
+### Customizing the Symbol Set
+
+To specify custom character sets for the `mode` option, you can use the `Custom` variant of the `Symbols` enum.
+
+Use the `--mode` option followed by your custom character set. For example, to use the custom character set "abc123", you would run the command:
+```sh
+cargo run --release -- --mode abc123
+```
+
+The custom character set can be any string of characters you want to use. The program will randomly select characters from this set for the matrix rain effect.
+
+The custom character set is defined in the `src/config.rs` file and is handled by the `Symbols::Custom` variant in the `src/symbols.rs` file.
+
 ---
 
 ## Contributing

@@ -119,10 +119,10 @@ impl Stream {
             // This is also a good time to check if the last entity is off the screen,
             // and if it is, we regenerate the stream and place it back at the top.
             let should_regenerate = match config.direction {
-                Direction::Down => self.y >= rows as f32,
-                Direction::Up => self.y < 0.0,
-                Direction::Left => self.x >= columns as f32,
-                Direction::Right => self.x < 0.0,
+                Direction::Down => e.y >= rows as f32,
+                Direction::Up => e.y < 0.0,
+                Direction::Left => e.x >= columns as f32,
+                Direction::Right => e.x < 0.0,
             };
 
             if should_regenerate {

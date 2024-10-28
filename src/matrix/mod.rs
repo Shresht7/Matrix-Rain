@@ -41,35 +41,41 @@ impl Matrix {
             streams: Vec::new(),
         };
 
-        //  Generate a stream
+        //  Determine the count of streams to generate
         let count = match config.direction {
             Direction::Up | Direction::Down => ret.columns,
             Direction::Left | Direction::Right => ret.rows,
         };
+
+        // Generate the Matrix Streams
         for c in 0..count {
-            // Space out the streams, if specified
+            // Space out the streams, if specified in the configuration
             if c % config.stream_spacing != 0 {
                 continue;
             }
-            //  Generate the stream
-            let stream = match config.direction {
+
+            // Determine the starting x and y positions based on the direction of flow
+            let (x, y) = match config.direction {
                 Direction::Down => {
                     let offset = utils::random_between(-50, 0);
-                    Stream::new(c as f32, offset as f32, config)
+                    (c as f32, offset as f32)
                 }
                 Direction::Up => {
                     let offset = utils::random_between(ret.rows, ret.rows + 50);
-                    Stream::new(c as f32, offset as f32, config)
+                    (c as f32, offset as f32)
                 }
                 Direction::Left => {
                     let offset = utils::random_between(-50, 0);
-                    Stream::new(offset as f32, c as f32, config)
+                    (offset as f32, c as f32)
                 }
                 Direction::Right => {
                     let offset = utils::random_between(ret.columns, ret.columns + 50);
-                    Stream::new(offset as f32, c as f32, config)
+                    (offset as f32, c as f32)
                 }
             };
+
+            // Instantiate a Stream
+            let stream = Stream::new(x, y, config);
 
             //  Add stream to vector collection
             ret.streams.push(stream);

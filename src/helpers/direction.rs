@@ -1,3 +1,4 @@
+/// Describes the direction of motion of the Matrix Streams
 #[derive(Default, Clone, Debug)]
 pub enum Direction {
     #[default]
@@ -22,7 +23,7 @@ impl std::str::FromStr for Direction {
 }
 
 impl Direction {
-    /// Whether the direction is vertical
+    /// Returns a boolean indicating whether the direction is vertical
     pub fn is_vertical(&self) -> bool {
         match self {
             Direction::Up | Direction::Down => true,
@@ -30,7 +31,7 @@ impl Direction {
         }
     }
 
-    /// Whether the direction is horizontal
+    /// Returns a boolean indicating whether the direction is horizontal
     pub fn is_horizontal(&self) -> bool {
         match self {
             Direction::Left | Direction::Right => true,

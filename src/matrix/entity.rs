@@ -90,7 +90,7 @@ impl Entity {
         stdout: &mut std::io::Stdout,
         config: &config::Config,
     ) -> std::io::Result<()> {
-        // Don't render if y is above screen
+        // Don't render if the entity is off-screen
         if config.direction.is_vertical() && self.y < 0.0 || self.y > rows as f32 {
             return Ok(());
         } else if config.direction.is_horizontal() && self.x < 0.0 || self.x > columns as f32 {

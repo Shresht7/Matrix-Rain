@@ -82,21 +82,16 @@ impl Stream {
             // Determine the color of the entity based on the gradient
             let color = gradient.interpolate(i as f32 / self.count as f32);
 
-            // Create the entity and add it to the entities vector
-            let mut e = match config.direction {
-                Direction::Down => {
-                    Entity::new(self.x, self.y - i as f32, speed_x, speed_y, color, config)
-                }
-                Direction::Up => {
-                    Entity::new(self.x, self.y + i as f32, speed_x, speed_y, color, config)
-                }
-                Direction::Left => {
-                    Entity::new(self.x - i as f32, self.y, speed_x, speed_y, color, config)
-                }
-                Direction::Right => {
-                    Entity::new(self.x + i as f32, self.y, speed_x, speed_y, color, config)
-                }
+            // Determine the entity starting x and y positions based on the direction of flow
+            let (x, y) = match config.direction {
+                Direction::Down => (self.x, self.y - i as f32),
+                Direction::Up => (self.x, self.y + i as f32),
+                Direction::Left => (self.x - i as f32, self.y),
+                Direction::Right => (self.x + i as f32, self.y),
             };
+
+            // Create the entity and add it to the entities vector
+            let mut e = Entity::new(x, y, speed_x, speed_y, color, config);
             e.set_symbol();
             self.entities.push(e);
         }
@@ -121,8 +116,7 @@ impl Stream {
                     .queue(Print(" "))?;
             }
 
-            // This is also a good time to check if the last entity is off screen,
-            // (i.e. the y position is greater than the number of rows)
+            // This is also a good time to check if the last entity is off the screen,
             // and if it is, we regenerate the stream and place it back at the top.
             let should_regenerate = match config.direction {
                 Direction::Down => self.y >= rows as f32,

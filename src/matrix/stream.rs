@@ -3,7 +3,7 @@ use crossterm::style::Print;
 use crossterm::QueueableCommand;
 
 use crate::config;
-use crate::helpers::{colors, utils};
+use crate::helpers::{colors, direction::Direction, utils};
 
 use super::entity::Entity;
 
@@ -53,11 +53,24 @@ impl Stream {
         // Randomize the count
         self.count = utils::random_between(config.stream_min_count, config.stream_max_count);
 
+        // Determine the speed based on the direction of motion
+        let (speed_x, speed_y) = match config.direction {
+            Direction::Down => (0.0, self.speed),
+            Direction::Up => (0.0, -self.speed),
+            Direction::Right => (self.speed, 0.0),
+            Direction::Left => (-self.speed, 0.0),
+            Direction::DiagonalRight => (self.speed, self.speed),
+            Direction::DiagonalRightReverse => (-self.speed, -self.speed),
+            Direction::DiagonalLeft => (-self.speed, self.speed),
+            Direction::DiagonalLeftReverse => (self.speed, -self.speed),
+        };
+
         // Create the leading entity
         self.entities.push(Entity::new(
             self.x,
             self.y,
-            self.speed,
+            speed_x,
+            speed_y,
             config.leading_entity_color,
             config,
         ));
@@ -73,8 +86,20 @@ impl Stream {
             // Determine the color of the entity based on the gradient
             let color = gradient.interpolate(i as f32 / self.count as f32);
 
+            // Determine the entity starting x and y positions based on the direction of flow
+            let (x, y) = match config.direction {
+                Direction::Down => (self.x, self.y - i as f32),
+                Direction::Up => (self.x, self.y + i as f32),
+                Direction::Right => (self.x - i as f32, self.y),
+                Direction::Left => (self.x + i as f32, self.y),
+                Direction::DiagonalRight => (self.x - i as f32, self.y - i as f32),
+                Direction::DiagonalRightReverse => (self.x + i as f32, self.y + i as f32),
+                Direction::DiagonalLeft => (self.x + i as f32, self.y - i as f32),
+                Direction::DiagonalLeftReverse => (self.x - i as f32, self.y + i as f32),
+            };
+
             // Create the entity and add it to the entities vector
-            let mut e = Entity::new(self.x, self.y - i as f32, self.speed, color, config);
+            let mut e = Entity::new(x, y, speed_x, speed_y, color, config);
             e.set_symbol();
             self.entities.push(e);
         }
@@ -84,6 +109,7 @@ impl Stream {
     pub fn render(
         &mut self,
         rows: i32,
+        columns: i32,
         config: &config::Config,
         stdout: &mut std::io::Stdout,
     ) -> std::io::Result<()> {
@@ -98,18 +124,28 @@ impl Stream {
                     .queue(Print(" "))?;
             }
 
-            // This is also a good time to check if the last entity is off screen,
-            // (i.e. the y position is greater than the number of rows)
+            // This is also a good time to check if the last entity is off the screen,
             // and if it is, we regenerate the stream and place it back at the top.
-            if e.y >= rows as f32 {
-                self.generate_entities(&config);
+            let should_regenerate = match config.direction {
+                Direction::Down => e.y >= rows as f32,
+                Direction::Up => e.y < 0.0,
+                Direction::Right => e.x >= columns as f32,
+                Direction::Left => e.x < 0.0,
+                Direction::DiagonalLeft => e.x < 0.0 && e.y >= rows as f32,
+                Direction::DiagonalLeftReverse => e.x >= columns as f32 && e.y < 0.0,
+                Direction::DiagonalRight => e.x >= columns as f32 && e.y >= rows as f32,
+                Direction::DiagonalRightReverse => e.x < 0.0 && e.y < 0.0,
+            };
+
+            if should_regenerate {
+                self.generate_entities(config);
             }
         }
 
         // Move the stream down and render each entity
         for entity in self.entities.iter_mut() {
             entity.rain();
-            entity.render(stdout)?;
+            entity.render(rows, columns, stdout)?;
         }
 
         Ok(())

@@ -44,15 +44,16 @@ impl Entity {
     pub fn new(
         x: f32,
         y: f32,
-        speed: f32,
+        speed_x: f32,
+        speed_y: f32,
         color: colors::RGBColor,
         config: &config::Config,
     ) -> Self {
         Self {
             x,
             y,
-            speed_x: 0.0,
-            speed_y: speed,
+            speed_x,
+            speed_y,
             color,
             symbol: ' ',
             mode: config.mode.clone(),
@@ -82,9 +83,14 @@ impl Entity {
     }
 
     /// Render Entity on screen
-    pub fn render(&mut self, stdout: &mut std::io::Stdout) -> std::io::Result<()> {
-        // Don't render if y is above screen
-        if self.y < 0.0 {
+    pub fn render(
+        &mut self,
+        rows: i32,
+        columns: i32,
+        stdout: &mut std::io::Stdout,
+    ) -> std::io::Result<()> {
+        // Don't render if the entity is off-screen
+        if self.x < 0.0 || self.x >= columns as f32 || self.y < 0.0 || self.y >= rows as f32 {
             return Ok(());
         }
 

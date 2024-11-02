@@ -1,6 +1,10 @@
 use std::io::Write;
 
-use super::{config, helpers::utils, symbols};
+use super::{
+    config,
+    helpers::{direction::Direction, utils},
+    symbols,
+};
 
 mod entity;
 mod stream;
@@ -37,15 +41,65 @@ impl Matrix {
             streams: Vec::new(),
         };
 
-        //  Generate a stream for each column
-        for c in 0..ret.columns {
-            // Space out the streams, if specified
+        //  Determine the count of streams to generate
+        let count = match config.direction {
+            Direction::Up | Direction::Down => ret.columns,
+            Direction::Right | Direction::Left => ret.rows,
+            Direction::DiagonalRight
+            | Direction::DiagonalRightReverse
+            | Direction::DiagonalLeft
+            | Direction::DiagonalLeftReverse => ret.columns + ret.rows, // We need more columns to cover the entire view-space when moving diagonally
+        };
+
+        // Generate the Matrix Streams
+        for c in 0..count {
+            // Space out the streams, if specified in the configuration
             if c % config.stream_spacing != 0 {
                 continue;
             }
-            //  Generate the stream
-            let height_offset = utils::random_between(-50, 0);
-            let stream = Stream::new(c as f32, height_offset as f32, config);
+
+            // Determine the starting x and y positions based on the direction of flow
+            let (x, y) = match config.direction {
+                Direction::Down => {
+                    let offset = utils::random_between(-50, 0);
+                    (c as f32, offset as f32)
+                }
+                Direction::Up => {
+                    let offset = utils::random_between(ret.rows, ret.rows + 50);
+                    (c as f32, offset as f32)
+                }
+                Direction::Right => {
+                    let offset = utils::random_between(-50, 0);
+                    (offset as f32, c as f32)
+                }
+                Direction::Left => {
+                    let offset = utils::random_between(ret.columns, ret.columns + 50);
+                    (offset as f32, c as f32)
+                }
+                Direction::DiagonalLeft => {
+                    let x_offset = c as f32 + (ret.columns + ret.rows) as f32 / 2.0;
+                    let y_offset = utils::random_between(-50, 0);
+                    (x_offset, y_offset as f32)
+                }
+                Direction::DiagonalLeftReverse => {
+                    let x_offset = c as f32 - (ret.columns + ret.rows) as f32 / 2.0;
+                    let y_offset = utils::random_between(ret.rows, ret.rows + 50);
+                    (x_offset, y_offset as f32)
+                }
+                Direction::DiagonalRight => {
+                    let x_offset = c as f32 - (ret.columns + ret.rows) as f32 / 2.0;
+                    let y_offset = utils::random_between(-50, 0);
+                    (x_offset, y_offset as f32)
+                }
+                Direction::DiagonalRightReverse => {
+                    let x_offset = c as f32 + (ret.columns + ret.rows) as f32 / 2.0;
+                    let y_offset = utils::random_between(ret.rows, ret.rows + 50);
+                    (x_offset, y_offset as f32)
+                }
+            };
+
+            // Instantiate a Stream
+            let stream = Stream::new(x, y, config);
 
             //  Add stream to vector collection
             ret.streams.push(stream);
@@ -75,7 +129,7 @@ impl Matrix {
         stdout: &mut std::io::Stdout,
     ) -> std::io::Result<()> {
         for stream in self.streams.iter_mut() {
-            stream.render(self.rows as i32, config, stdout)?;
+            stream.render(self.rows as i32, self.columns as i32, config, stdout)?;
         }
         stdout.flush()?;
         Ok(())

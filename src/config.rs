@@ -1,6 +1,6 @@
 use clap::Parser;
 
-use crate::helpers::colors;
+use crate::helpers::{colors, direction};
 use crate::symbols;
 
 //  =============
@@ -76,4 +76,8 @@ pub struct Config {
     /// symbol as they rain down the screen.
     #[clap(long, default_value_t = 1)]
     pub switch_interval: u16,
+
+    /// The direction of motion for the stream particles
+    #[clap(long, default_value = "down")]
+    pub direction: direction::Direction,
 }

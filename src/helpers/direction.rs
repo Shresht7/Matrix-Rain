@@ -21,10 +21,10 @@ impl std::str::FromStr for Direction {
             "down" | "vertical" => Ok(Self::Down),
             "left" | "horizontal" => Ok(Self::Left),
             "right" | "horizontal-reverse" => Ok(Self::Right),
-            "diagonal-left" | "top-left" => Ok(Self::DiagonalLeft),
-            "diagonal-left-reverse" | "bottom-right" => Ok(Self::DiagonalLeftReverse),
-            "diagonal-right" | "top-right" => Ok(Self::DiagonalRight),
-            "diagonal-right-reverse" | "bottom-left" => Ok(Self::DiagonalRightReverse),
+            "diagonal-left" | "bottom-left" => Ok(Self::DiagonalLeft),
+            "diagonal-left-reverse" | "top-right" => Ok(Self::DiagonalLeftReverse),
+            "diagonal-right" | "bottom-right" => Ok(Self::DiagonalRight),
+            "diagonal-right-reverse" | "top-left" => Ok(Self::DiagonalRightReverse),
             _ => Err(ParseDirectionError::from(s.to_string())),
         }
     }

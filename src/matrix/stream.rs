@@ -59,10 +59,10 @@ impl Stream {
             Direction::Up => (0.0, -self.speed),
             Direction::Right => (self.speed, 0.0),
             Direction::Left => (-self.speed, 0.0),
-            Direction::DiagonalLeft => (self.speed, self.speed),
-            Direction::DiagonalLeftReverse => (-self.speed, -self.speed),
-            Direction::DiagonalRight => (-self.speed, self.speed),
-            Direction::DiagonalRightReverse => (self.speed, -self.speed),
+            Direction::DiagonalRight => (self.speed, self.speed),
+            Direction::DiagonalRightReverse => (-self.speed, -self.speed),
+            Direction::DiagonalLeft => (-self.speed, self.speed),
+            Direction::DiagonalLeftReverse => (self.speed, -self.speed),
         };
 
         // Create the leading entity
@@ -92,10 +92,10 @@ impl Stream {
                 Direction::Up => (self.x, self.y + i as f32),
                 Direction::Right => (self.x - i as f32, self.y),
                 Direction::Left => (self.x + i as f32, self.y),
-                Direction::DiagonalLeft => (self.x - i as f32, self.y - i as f32),
-                Direction::DiagonalLeftReverse => (self.x + i as f32, self.y + i as f32),
-                Direction::DiagonalRight => (self.x + i as f32, self.y - i as f32),
-                Direction::DiagonalRightReverse => (self.x - i as f32, self.y + i as f32),
+                Direction::DiagonalRight => (self.x - i as f32, self.y - i as f32),
+                Direction::DiagonalRightReverse => (self.x + i as f32, self.y + i as f32),
+                Direction::DiagonalLeft => (self.x + i as f32, self.y - i as f32),
+                Direction::DiagonalLeftReverse => (self.x - i as f32, self.y + i as f32),
             };
 
             // Create the entity and add it to the entities vector
@@ -131,10 +131,10 @@ impl Stream {
                 Direction::Up => e.y < 0.0,
                 Direction::Right => e.x >= columns as f32,
                 Direction::Left => e.x < 0.0,
-                Direction::DiagonalLeft => e.x > columns as f32 && e.y > rows as f32,
-                Direction::DiagonalLeftReverse => e.x < 0.0 && e.y < 0.0,
-                Direction::DiagonalRight => e.x < 0.0 as f32 && e.y > rows as f32,
-                Direction::DiagonalRightReverse => e.x > columns as f32 && e.y > rows as f32,
+                Direction::DiagonalRight => e.x > columns as f32 && e.y > rows as f32,
+                Direction::DiagonalRightReverse => e.x < 0.0 && e.y < 0.0,
+                Direction::DiagonalLeft => e.x < 0.0 as f32 && e.y > rows as f32,
+                Direction::DiagonalLeftReverse => e.x > columns as f32 && e.y > rows as f32,
             };
 
             if should_regenerate {

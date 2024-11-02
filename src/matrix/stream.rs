@@ -57,8 +57,8 @@ impl Stream {
         let (speed_x, speed_y) = match config.direction {
             Direction::Down => (0.0, self.speed),
             Direction::Up => (0.0, -self.speed),
-            Direction::Left => (self.speed, 0.0),
-            Direction::Right => (-self.speed, 0.0),
+            Direction::Right => (self.speed, 0.0),
+            Direction::Left => (-self.speed, 0.0),
             Direction::DiagonalLeft => (self.speed, self.speed),
             Direction::DiagonalLeftReverse => (-self.speed, -self.speed),
             Direction::DiagonalRight => (-self.speed, self.speed),
@@ -90,8 +90,8 @@ impl Stream {
             let (x, y) = match config.direction {
                 Direction::Down => (self.x, self.y - i as f32),
                 Direction::Up => (self.x, self.y + i as f32),
-                Direction::Left => (self.x - i as f32, self.y),
-                Direction::Right => (self.x + i as f32, self.y),
+                Direction::Right => (self.x - i as f32, self.y),
+                Direction::Left => (self.x + i as f32, self.y),
                 Direction::DiagonalLeft => (self.x - i as f32, self.y - i as f32),
                 Direction::DiagonalLeftReverse => (self.x + i as f32, self.y + i as f32),
                 Direction::DiagonalRight => (self.x + i as f32, self.y - i as f32),
@@ -129,8 +129,8 @@ impl Stream {
             let should_regenerate = match config.direction {
                 Direction::Down => e.y >= rows as f32,
                 Direction::Up => e.y < 0.0,
-                Direction::Left => e.x >= columns as f32,
-                Direction::Right => e.x < 0.0,
+                Direction::Right => e.x >= columns as f32,
+                Direction::Left => e.x < 0.0,
                 Direction::DiagonalLeft => e.x > columns as f32 && e.y > rows as f32,
                 Direction::DiagonalLeftReverse => e.x < 0.0 && e.y < 0.0,
                 Direction::DiagonalRight => e.x < 0.0 as f32 && e.y > rows as f32,

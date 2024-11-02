@@ -44,7 +44,7 @@ impl Matrix {
         //  Determine the count of streams to generate
         let count = match config.direction {
             Direction::Up | Direction::Down => ret.columns,
-            Direction::Left | Direction::Right => ret.rows,
+            Direction::Right | Direction::Left => ret.rows,
             Direction::DiagonalLeft
             | Direction::DiagonalLeftReverse
             | Direction::DiagonalRight
@@ -68,11 +68,11 @@ impl Matrix {
                     let offset = utils::random_between(ret.rows, ret.rows + 50);
                     (c as f32, offset as f32)
                 }
-                Direction::Left => {
+                Direction::Right => {
                     let offset = utils::random_between(-50, 0);
                     (offset as f32, c as f32)
                 }
-                Direction::Right => {
+                Direction::Left => {
                     let offset = utils::random_between(ret.columns, ret.columns + 50);
                     (offset as f32, c as f32)
                 }

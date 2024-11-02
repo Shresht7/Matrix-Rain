@@ -7,6 +7,7 @@ pub enum Direction {
     Left,
     Right,
     DiagonalLeft,
+    DiagonalRight,
 }
 
 impl std::str::FromStr for Direction {
@@ -18,7 +19,8 @@ impl std::str::FromStr for Direction {
             "down" | "vertical" => Ok(Self::Down),
             "left" | "horizontal" => Ok(Self::Left),
             "right" | "horizontal-reverse" => Ok(Self::Right),
-            "diagonal" | "diagonal-left" | "top-left" => Ok(Self::DiagonalLeft),
+            "diagonal-left" | "top-left" => Ok(Self::DiagonalLeft),
+            "diagonal-right" | "top-right" => Ok(Self::DiagonalRight),
             _ => Err(ParseDirectionError::from(s.to_string())),
         }
     }

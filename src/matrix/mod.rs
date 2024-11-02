@@ -48,7 +48,7 @@ impl Matrix {
             Direction::DiagonalRight
             | Direction::DiagonalRightReverse
             | Direction::DiagonalLeft
-            | Direction::DiagonalLeftReverse => ret.columns * 2,
+            | Direction::DiagonalLeftReverse => ret.columns + ret.rows, // We need more columns to cover the entire view-space when moving diagonally
         };
 
         // Generate the Matrix Streams
@@ -76,13 +76,23 @@ impl Matrix {
                     let offset = utils::random_between(ret.columns, ret.columns + 50);
                     (offset as f32, c as f32)
                 }
-                Direction::DiagonalRight | Direction::DiagonalLeft => {
-                    let x_offset = c as f32 - (ret.columns as f32 / 2.0);
+                Direction::DiagonalLeft => {
+                    let x_offset = c as f32 + (ret.columns + ret.rows) as f32 / 2.0;
                     let y_offset = utils::random_between(-50, 0);
                     (x_offset, y_offset as f32)
                 }
-                Direction::DiagonalRightReverse | Direction::DiagonalLeftReverse => {
-                    let x_offset = c as f32 - (ret.columns as f32 / 2.0);
+                Direction::DiagonalLeftReverse => {
+                    let x_offset = c as f32 - (ret.columns + ret.rows) as f32 / 2.0;
+                    let y_offset = utils::random_between(ret.rows, ret.rows + 50);
+                    (x_offset, y_offset as f32)
+                }
+                Direction::DiagonalRight => {
+                    let x_offset = c as f32 - (ret.columns + ret.rows) as f32 / 2.0;
+                    let y_offset = utils::random_between(-50, 0);
+                    (x_offset, y_offset as f32)
+                }
+                Direction::DiagonalRightReverse => {
+                    let x_offset = c as f32 + (ret.columns + ret.rows) as f32 / 2.0;
                     let y_offset = utils::random_between(ret.rows, ret.rows + 50);
                     (x_offset, y_offset as f32)
                 }

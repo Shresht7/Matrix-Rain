@@ -131,10 +131,10 @@ impl Stream {
                 Direction::Up => e.y < 0.0,
                 Direction::Right => e.x >= columns as f32,
                 Direction::Left => e.x < 0.0,
-                Direction::DiagonalRight => e.x > columns as f32 && e.y > rows as f32,
+                Direction::DiagonalLeft => e.x < 0.0 && e.y >= rows as f32,
+                Direction::DiagonalLeftReverse => e.x >= columns as f32 && e.y < 0.0,
+                Direction::DiagonalRight => e.x >= columns as f32 && e.y >= rows as f32,
                 Direction::DiagonalRightReverse => e.x < 0.0 && e.y < 0.0,
-                Direction::DiagonalLeft => e.x < 0.0 as f32 && e.y > rows as f32,
-                Direction::DiagonalLeftReverse => e.x > columns as f32 && e.y > rows as f32,
             };
 
             if should_regenerate {

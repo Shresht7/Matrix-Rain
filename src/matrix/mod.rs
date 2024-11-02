@@ -45,10 +45,10 @@ impl Matrix {
         let count = match config.direction {
             Direction::Up | Direction::Down => ret.columns,
             Direction::Right | Direction::Left => ret.rows,
-            Direction::DiagonalLeft
-            | Direction::DiagonalLeftReverse
-            | Direction::DiagonalRight
-            | Direction::DiagonalRightReverse => ret.columns * 2,
+            Direction::DiagonalRight
+            | Direction::DiagonalRightReverse
+            | Direction::DiagonalLeft
+            | Direction::DiagonalLeftReverse => ret.columns * 2,
         };
 
         // Generate the Matrix Streams
@@ -76,12 +76,12 @@ impl Matrix {
                     let offset = utils::random_between(ret.columns, ret.columns + 50);
                     (offset as f32, c as f32)
                 }
-                Direction::DiagonalLeft | Direction::DiagonalRight => {
+                Direction::DiagonalRight | Direction::DiagonalLeft => {
                     let x_offset = c as f32 - (ret.columns as f32 / 2.0);
                     let y_offset = utils::random_between(-50, 0);
                     (x_offset, y_offset as f32)
                 }
-                Direction::DiagonalLeftReverse | Direction::DiagonalRightReverse => {
+                Direction::DiagonalRightReverse | Direction::DiagonalLeftReverse => {
                     let x_offset = c as f32 - (ret.columns as f32 / 2.0);
                     let y_offset = utils::random_between(ret.rows, ret.rows + 50);
                     (x_offset, y_offset as f32)

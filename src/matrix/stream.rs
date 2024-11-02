@@ -60,6 +60,7 @@ impl Stream {
             Direction::Left => (self.speed, 0.0),
             Direction::Right => (-self.speed, 0.0),
             Direction::DiagonalLeft => (self.speed, self.speed),
+            Direction::DiagonalRight => (-self.speed, self.speed),
         };
 
         // Create the leading entity
@@ -90,6 +91,7 @@ impl Stream {
                 Direction::Left => (self.x - i as f32, self.y),
                 Direction::Right => (self.x + i as f32, self.y),
                 Direction::DiagonalLeft => (self.x - i as f32, self.y - i as f32),
+                Direction::DiagonalRight => (self.x + i as f32, self.y - i as f32),
             };
 
             // Create the entity and add it to the entities vector
@@ -126,6 +128,7 @@ impl Stream {
                 Direction::Left => e.x >= columns as f32,
                 Direction::Right => e.x < 0.0,
                 Direction::DiagonalLeft => e.x > columns as f32 && e.y > rows as f32,
+                Direction::DiagonalRight => e.x < 0.0 as f32 && e.y > rows as f32,
             };
 
             if should_regenerate {

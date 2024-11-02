@@ -46,6 +46,7 @@ impl Matrix {
             Direction::Up | Direction::Down => ret.columns,
             Direction::Left | Direction::Right => ret.rows,
             Direction::DiagonalLeft => ret.columns * 2,
+            Direction::DiagonalRight => ret.columns * 2,
         };
 
         // Generate the Matrix Streams
@@ -74,6 +75,11 @@ impl Matrix {
                     (offset as f32, c as f32)
                 }
                 Direction::DiagonalLeft => {
+                    let x_offset = c as f32 - (ret.columns as f32 / 2.0);
+                    let y_offset = utils::random_between(-50, 0);
+                    (x_offset, y_offset as f32)
+                }
+                Direction::DiagonalRight => {
                     let x_offset = c as f32 - (ret.columns as f32 / 2.0);
                     let y_offset = utils::random_between(-50, 0);
                     (x_offset, y_offset as f32)

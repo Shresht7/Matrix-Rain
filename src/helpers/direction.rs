@@ -30,32 +30,6 @@ impl std::str::FromStr for Direction {
     }
 }
 
-// impl Direction {
-//     /// Returns a boolean indicating whether the direction is vertical
-//     pub fn is_vertical(&self) -> bool {
-//         match self {
-//             Direction::Up | Direction::Down => true,
-//             _ => false,
-//         }
-//     }
-
-//     /// Returns a boolean indicating whether the direction is horizontal
-//     pub fn is_horizontal(&self) -> bool {
-//         match self {
-//             Direction::Left | Direction::Right => true,
-//             _ => false,
-//         }
-//     }
-
-//      /// Returns a boolean indicating whether the direction is diagonal
-//      pub fn is_diagonal(&self) -> bool {
-//          match self {
-//              Direction::DiagonalLeft => true,
-//              _ => false
-//          }
-//      }
-// }
-
 // ERROR
 // -----
 

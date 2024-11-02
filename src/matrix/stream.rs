@@ -59,6 +59,7 @@ impl Stream {
             Direction::Up => (0.0, -self.speed),
             Direction::Left => (self.speed, 0.0),
             Direction::Right => (-self.speed, 0.0),
+            Direction::DiagonalLeft => (self.speed, self.speed),
         };
 
         // Create the leading entity
@@ -88,6 +89,7 @@ impl Stream {
                 Direction::Up => (self.x, self.y + i as f32),
                 Direction::Left => (self.x - i as f32, self.y),
                 Direction::Right => (self.x + i as f32, self.y),
+                Direction::DiagonalLeft => (self.x - i as f32, self.y - i as f32),
             };
 
             // Create the entity and add it to the entities vector
@@ -123,6 +125,7 @@ impl Stream {
                 Direction::Up => e.y < 0.0,
                 Direction::Left => e.x >= columns as f32,
                 Direction::Right => e.x < 0.0,
+                Direction::DiagonalLeft => e.x > columns as f32 && e.y > rows as f32,
             };
 
             if should_regenerate {
@@ -133,7 +136,7 @@ impl Stream {
         // Move the stream down and render each entity
         for entity in self.entities.iter_mut() {
             entity.rain();
-            entity.render(rows, columns, stdout, config)?;
+            entity.render(rows, columns, stdout)?;
         }
 
         Ok(())
